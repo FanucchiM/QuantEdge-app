@@ -1,0 +1,66 @@
+services:
+  # Python Analytics Service
+  - name: quantedge-analytics
+    type: python
+    repo: https://github.com/FanucchiM/quantedge
+    branch: main
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PORT
+        value: "8000"
+      - key: API_URL
+        value: https://quantedge-api-a1ib.onrender.com
+      - key: SCHEDULE_HOUR
+        value: "6"
+      - key: SCHEDULE_MINUTE
+        value: "0"
+      - key: YFINANCE_CACHE_TTL
+        value: "28800"
+      - key: FINNHUB_API_KEY
+        sync: false  # Set this manually in Render dashboard
+      - key: FINNHUB_CACHE_TTL
+        value: "86400"
+      - key: FINNHUB_RATE_LIMIT_DELAY
+        value: "0.5"
+      - key: FINNHUB_MAX_RETRIES
+        value: "3"
+      - key: FINNHUB_TIMEOUT
+        value: "10.0"
+      - key: CORS_ORIGINS
+        value: "*"
+
+  # Java API Service
+  - name: quantedge-api
+    type: docker
+    repo: https://github.com/FanucchiM/quantedge
+    branch: main
+    dockerfilePath: api-service/Dockerfile
+    dockerContext: .
+    envVars:
+      - key: PORT
+        value: "8081"
+      - key: DATABASE_URL
+        sync: false  # Set this in Render dashboard after creating PostgreSQL
+      - key: SPRING_JPA_HIBERNATE_DDL_AUTO
+        value: "update"
+      - key: ANALYTICS_SERVICE_URL
+        value: https://quantedge-analytics.onrender.com
+      - key: JWT_SECRET
+        sync: false  # Generate and set this manually
+      - key: CORS_ORIGINS
+        value: "https://quantedge-frontend.onrender.com"
+
+  # Angular Frontend
+  - name: quantedge-frontend
+    type: docker
+    repo: https://github.com/FanucchiM/quantedge
+    branch: main
+    dockerfilePath: frontend/Dockerfile
+    dockerContext: .
+
+databases:
+  - name: quantedge-db
+    type: postgres
+    plan: free
+    region: oregon

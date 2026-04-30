@@ -1,0 +1,30 @@
+@use '@angular/material' as mat;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #0f0f1a;
+  color: #eaeaea;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.disclaimer-footer {
+  background: #1f2937;
+  color: #9ca3af;
+  padding: 12px 20px;
+  text-align: center;
+  font-size: 12px;
+  border-top: 1px solid #374151;
+  margin-top: 40px;
+}
+
+.disclaimer-footer:empty {
+  display: none;
+}
