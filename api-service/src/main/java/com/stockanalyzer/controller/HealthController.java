@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {org.springframework.http.HttpMethod.GET, org.springframework.http.HttpMethod.POST, org.springframework.http.HttpMethod.PUT, org.springframework.http.HttpMethod.DELETE, org.springframework.http.HttpMethod.OPTIONS})
+@CrossOrigin(origins = "*")
 public class HealthController {
     
     @GetMapping("/api/health")

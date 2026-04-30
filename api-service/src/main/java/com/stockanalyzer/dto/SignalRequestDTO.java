@@ -1,16 +1,8 @@
 package com.stockanalyzer.dto;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 import jakarta.validation.constraints.*;
 import java.time.LocalDateTime;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class SignalRequestDTO {
     
     @NotBlank(message = "Symbol is required")
@@ -53,4 +45,55 @@ public class SignalRequestDTO {
     private String logoUrl;
     private Long marketCap;
     private LocalDateTime analyzedAt;
+    
+    public SignalRequestDTO() {}
+    
+    public String getSymbol() { return symbol; }
+    public void setSymbol(String symbol) { this.symbol = symbol; }
+    public String getMarket() { return market; }
+    public void setMarket(String market) { this.market = market; }
+    public String getSignalType() { return signalType; }
+    public void setSignalType(String signalType) { this.signalType = signalType; }
+    public Double getRsi() { return rsi; }
+    public void setRsi(Double rsi) { this.rsi = rsi; }
+    public Double getEma20() { return ema20; }
+    public void setEma20(Double ema20) { this.ema20 = ema20; }
+    public Double getEma50() { return ema50; }
+    public void setEma50(Double ema50) { this.ema50 = ema50; }
+    public Double getMacd() { return macd; }
+    public void setMacd(Double macd) { this.macd = macd; }
+    public Double getAtr() { return atr; }
+    public void setAtr(Double atr) { this.atr = atr; }
+    public Double getPrice() { return price; }
+    public void setPrice(Double price) { this.price = price; }
+    public Double getPriceChange24h() { return priceChange24h; }
+    public void setPriceChange24h(Double priceChange24h) { this.priceChange24h = priceChange24h; }
+    public Double getPriceChangePercent24h() { return priceChangePercent24h; }
+    public void setPriceChangePercent24h(Double priceChangePercent24h) { this.priceChangePercent24h = priceChangePercent24h; }
+    public Double getVolumeRelative() { return volumeRelative; }
+    public void setVolumeRelative(Double volumeRelative) { this.volumeRelative = volumeRelative; }
+    public String getTrend() { return trend; }
+    public void setTrend(String trend) { this.trend = trend; }
+    public String getExplanation() { return explanation; }
+    public void setExplanation(String explanation) { this.explanation = explanation; }
+    public String getSummary() { return summary; }
+    public void setSummary(String summary) { this.summary = summary; }
+    public String getReasons() { return reasons; }
+    public void setReasons(String reasons) { this.reasons = reasons; }
+    public String getCompanyName() { return companyName; }
+    public void setCompanyName(String companyName) { this.companyName = companyName; }
+    public String getSector() { return sector; }
+    public void setSector(String sector) { this.sector = sector; }
+    public String getIndustry() { return industry; }
+    public void setIndustry(String industry) { this.industry = industry; }
+    public String getExchange() { return exchange; }
+    public void setExchange(String exchange) { this.exchange = exchange; }
+    public String getCountry() { return country; }
+    public void setCountry(String country) { this.country = country; }
+    public String getLogoUrl() { return logoUrl; }
+    public void setLogoUrl(String logoUrl) { this.logoUrl = logoUrl; }
+    public Long getMarketCap() { return marketCap; }
+    public void setMarketCap(Long marketCap) { this.marketCap = marketCap; }
+    public LocalDateTime getAnalyzedAt() { return analyzedAt; }
+    public void setAnalyzedAt(LocalDateTime analyzedAt) { this.analyzedAt = analyzedAt; }
 }

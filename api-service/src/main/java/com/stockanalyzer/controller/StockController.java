@@ -13,7 +13,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/stocks")
-@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {org.springframework.http.HttpMethod.GET, org.springframework.http.HttpMethod.POST, org.springframework.http.HttpMethod.PUT, org.springframework.http.HttpMethod.DELETE, org.springframework.http.HttpMethod.OPTIONS})
+@CrossOrigin(origins = "*")
 public class StockController {
     private final IStockService stockService;
     private final RestTemplate restTemplate;
