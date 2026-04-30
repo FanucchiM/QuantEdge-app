@@ -1,0 +1,32 @@
+[
+    {
+        "symbol": "AAPL",
+        "name": "Apple Inc.",
+        "logo": "https://www.google.com/s2/favicons?domain=apple.com&sz=64",
+        "sector": "Technology",
+        "industry": "Consumer Electronics",
+        "exchange": "NASDAQ",
+        "country": "US",
+        "marketCap": 3725926
+    },
+    {
+        "symbol": "TM",
+        "name": "Toyota Motor Corporation",
+        "logo": "https://www.google.com/s2/favicons?domain=toyota.com&sz=64",
+        "sector": "Consumer Discretionary",
+        "industry": "Automobiles",
+        "exchange": "NYSE",
+        "country": "JP",
+        "marketCap": 42019651
+    },
+    {
+        "symbol": "SONY",
+        "name": "Sony Group Corporation",
+        "logo": "https://www.google.com/s2/favicons?domain=sony.com&sz=64",
+        "sector": "Communication Services",
+        "industry": "Consumer Electronics",
+        "exchange": "NYSE",
+        "country": "JP",
+        "marketCap": 19478767
+    }
+]
