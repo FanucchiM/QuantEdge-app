@@ -31,6 +31,39 @@ public class SignalDTO {
     
     public SignalDTO() {}
     
+    public SignalDTO(Long id, String symbol, String market, String signalType, Double rsi,
+            Double ema20, Double ema50, Double macd, Double atr, Double price,
+            Double priceChange24h, Double priceChangePercent24h, Double volumeRelative,
+            String trend, String explanation, String summary, String reasons,
+            String companyName, String sector, String industry, String exchange,
+            String country, String logoUrl, Long marketCap, LocalDateTime analyzedAt) {
+        this.id = id;
+        this.symbol = symbol;
+        this.market = market;
+        this.signalType = signalType;
+        this.rsi = rsi;
+        this.ema20 = ema20;
+        this.ema50 = ema50;
+        this.macd = macd;
+        this.atr = atr;
+        this.price = price;
+        this.priceChange24h = priceChange24h;
+        this.priceChangePercent24h = priceChangePercent24h;
+        this.volumeRelative = volumeRelative;
+        this.trend = trend;
+        this.explanation = explanation;
+        this.summary = summary;
+        this.reasons = reasons;
+        this.companyName = companyName;
+        this.sector = sector;
+        this.industry = industry;
+        this.exchange = exchange;
+        this.country = country;
+        this.logoUrl = logoUrl;
+        this.marketCap = marketCap;
+        this.analyzedAt = analyzedAt;
+    }
+    
     public static SignalDTOBuilder builder() {
         return new SignalDTOBuilder();
     }
