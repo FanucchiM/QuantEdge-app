@@ -1,7 +1,7 @@
 [build]
-  command = "npm run build"
+  base = "frontend"
+  command = "npm run build -- --configuration production"
   publish = "dist/frontend/browser"
-  directory = "frontend"
 
 [build.environment]
   NODE_VERSION = "20"
