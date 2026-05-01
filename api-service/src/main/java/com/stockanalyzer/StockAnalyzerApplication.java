@@ -15,15 +15,14 @@ public class StockAnalyzerApplication {
     }
     
     @Bean
-    public CorsFilter corsFilter(
-            @Value("${app.cors.allowed-origins:http://localhost:4200}") String allowedOrigins) {
+    public CorsFilter corsFilter() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(java.util.List.of(allowedOrigins.split(",")));
+        configuration.setAllowedOriginPatterns(java.util.List.of("*"));
         configuration.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(java.util.List.of("*"));
-        configuration.setAllowCredentials(true);
+        configuration.setAllowCredentials(false);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
+        source.registerCorsConfiguration("/api/**", configuration);
         return new CorsFilter(source);
     }
 }
