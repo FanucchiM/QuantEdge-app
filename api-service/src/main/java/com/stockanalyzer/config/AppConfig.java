@@ -16,11 +16,14 @@ public class AppConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/**")
-                .allowedOriginPatterns("*")
+        String allowedOrigins = System.getenv("CORS_ALLOWED_ORIGINS") != null 
+            ? System.getenv("CORS_ALLOWED_ORIGINS") 
+            : "*";
+        
+        registry.addMapping("/**")
+                .allowedOriginPatterns(allowedOrigins, "http://localhost:4200")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
-                .allowCredentials(false)
                 .maxAge(3600);
     }
 }
