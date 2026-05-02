@@ -705,6 +705,7 @@ export type SortDirection = 'asc' | 'desc' | null;
       border-radius: 12px;
       padding: 8px;
       min-width: 160px;
+      max-width: calc(100vw - 40px);
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
       z-index: 100;
       animation: fadeIn 0.2s ease;
