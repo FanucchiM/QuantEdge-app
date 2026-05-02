@@ -699,7 +699,7 @@ export type SortDirection = 'asc' | 'desc' | null;
     .sort-menu {
       position: absolute;
       top: calc(100% + 8px);
-      right: 0;
+      left: 0;
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 12px;
