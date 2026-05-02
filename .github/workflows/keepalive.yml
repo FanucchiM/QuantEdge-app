@@ -1,0 +1,12 @@
+name: Keep Python Service Alive
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'  # cada 15 minutos
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Python analytics
+        run: curl -s https://quantedge-analytics.onrender.com/health || true
