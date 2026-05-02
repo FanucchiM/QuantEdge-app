@@ -2028,7 +2028,7 @@ export type SortDirection = 'asc' | 'desc' | null;
 })
 export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('scrollSentinel') scrollSentinel!: ElementRef;
-  @ViewChild('priceChart') priceChartRef!: ElementRef;
+  
   @ViewChild('seasonalityChart') seasonalityChartRef!: ElementRef;
   
   signals: Signal[] = [];
@@ -2053,9 +2053,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   seasonalityData: any = null;
   private seasonalityChart: Chart | null = null;
 
-  // Chart toggles
-  showEma20 = true;
-  showEma50 = true;
+  
   
   sortColumn: SortColumn = null;
   sortDirection: SortDirection = null;
@@ -2068,7 +2066,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   private hasMore = true;
   private observer: IntersectionObserver | null = null;
   private destroyRef = inject(DestroyRef);
-  private priceChart: Chart | null = null;
+  
 
   constructor(private signalService: SignalService) {}
 
@@ -2294,10 +2292,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.stockHistory = null;
     this.historyError = null;
     this.seasonalityData = null;
-    if (this.priceChart) {
-      this.priceChart.destroy();
-      this.priceChart = null;
-    }
     if (this.seasonalityChart) {
       this.seasonalityChart.destroy();
       this.seasonalityChart = null;
@@ -2318,7 +2312,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         next: (data) => {
           this.stockHistory = data;
           this.loadingHistory = false;
-          setTimeout(() => this.createPriceChart(), 100);
         },
         error: (err) => {
           console.error('Error loading stock history:', err);
@@ -2362,125 +2355,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     if (cap >= 1e9) return `$${(cap / 1e9).toFixed(1)}B`;
     if (cap >= 1e6) return `$${(cap / 1e6).toFixed(1)}M`;
     return `$${cap.toLocaleString()}`;
-  }
-
-  createPriceChart(): void {
-    if (!this.stockHistory?.chartData || !this.priceChartRef) return;
-    
-    if (this.priceChart) {
-      this.priceChart.destroy();
-    }
-
-    const ctx = this.priceChartRef.nativeElement.getContext('2d');
-    const chartData = this.stockHistory.chartData;
-    const signalDate = this.stockHistory.signalGenerated?.date;
-    
-    const signalIndex = signalDate ? chartData.dates.indexOf(signalDate) : -1;
-
-    this.priceChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: chartData.dates,
-        datasets: [
-          {
-            label: 'Precio',
-            data: chartData.price,
-            borderColor: '#ffffff',
-            backgroundColor: 'rgba(255, 255, 255, 0.1)',
-            borderWidth: 2,
-            tension: 0.4,
-            pointRadius: 0,
-            pointHoverRadius: 4,
-            yAxisID: 'y'
-          },
-          {
-            label: 'EMA 20',
-            data: chartData.ema20,
-            borderColor: '#22C55E',
-            backgroundColor: 'transparent',
-            borderWidth: 1.5,
-            tension: 0.4,
-            pointRadius: 0,
-            pointHoverRadius: 3,
-            yAxisID: 'y',
-            hidden: !this.showEma20
-          },
-          {
-            label: 'EMA 50',
-            data: chartData.ema50,
-            borderColor: '#3B82F6',
-            backgroundColor: 'transparent',
-            borderWidth: 1.5,
-            tension: 0.4,
-            pointRadius: 0,
-            pointHoverRadius: 3,
-            yAxisID: 'y',
-            hidden: !this.showEma50
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        interaction: {
-          intersect: false,
-          mode: 'index'
-        },
-        plugins: {
-          legend: {
-            display: false
-          },
-          tooltip: {
-            backgroundColor: '#1F2937',
-            titleColor: '#fff',
-            bodyColor: '#9CA3AF',
-            borderColor: '#374151',
-            borderWidth: 1,
-            padding: 10,
-            displayColors: true,
-            callbacks: {
-              afterLabel: (context: any) => {
-                if (context.dataset.label === 'EMA 20 (corto plazo)') {
-                  return 'Promedio de precio de los últimos 20 días. Muestra la tendencia de corto plazo.';
-                }
-                if (context.dataset.label === 'EMA 50 (tendencia)') {
-                  return 'Promedio de precio de los últimos 50 días. Indica la tendencia general del mercado.';
-                }
-                return '';
-              },
-              label: (context: any) => {
-                const value = context.parsed.y ?? 0;
-                return `${context.dataset.label}: ${value.toFixed(2)}`;
-              }
-            }
-          }
-        },
-        scales: {
-          x: {
-            display: true,
-            grid: {
-              color: 'rgba(255, 255, 255, 0.05)'
-            },
-            ticks: {
-              color: '#6B7280',
-              maxTicksLimit: 8,
-              maxRotation: 0
-            }
-          },
-          y: {
-            display: true,
-            position: 'right',
-            grid: {
-              color: 'rgba(255, 255, 255, 0.05)'
-            },
-            ticks: {
-              color: '#6B7280',
-              callback: (value: any) => '$' + Number(value).toFixed(0)
-            }
-          }
-        }
-      }
-    });
   }
 
   createSeasonalityChart(): void {
@@ -2576,18 +2450,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       }
     });
-  }
-
-  updateChartVisibility(): void {
-    if (!this.priceChart) return;
-    
-    const ema20Dataset = this.priceChart.data.datasets.find((d: any) => d.label === 'EMA 20');
-    const ema50Dataset = this.priceChart.data.datasets.find((d: any) => d.label === 'EMA 50');
-    
-    if (ema20Dataset) (ema20Dataset as any).hidden = !this.showEma20;
-    if (ema50Dataset) (ema50Dataset as any).hidden = !this.showEma50;
-    
-    this.priceChart.update();
   }
 
   getRecommendationTitle(signal: Signal): string {
