@@ -237,14 +237,13 @@ export type SortDirection = 'asc' | 'desc' | null;
 
         <section class="table-section">
           <div class="table-header">
-            <h2>Señales del Día</h2>
-            <div class="table-controls">
+            <div class="header-row">
+              <h2>Señales del Día</h2>
               <div class="sort-dropdown">
                 <button class="sort-trigger" (click)="toggleSortMenu()" [class.active]="sortMenuOpen || sortConfigs.length > 0" title="Ordenar">
                   <svg class="sort-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M3 6h18M7 12h10M12 18h2"/>
                   </svg>
-                  <span class="sort-label-text">Ordenar</span>
                   <span class="sort-count" *ngIf="sortConfigs.length > 1">{{ sortConfigs.length }}</span>
                   <svg class="chevron" [class.open]="sortMenuOpen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M6 9l6 6 6-6"/>
@@ -569,17 +568,28 @@ export type SortDirection = 'asc' | 'desc' | null;
 
     .table-header {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+      flex-direction: column;
+      gap: 16px;
       margin-bottom: 28px;
     }
 
-    .table-header h2 {
+    .header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .header-row h2 {
       font-size: 22px;
       font-weight: 600;
       color: #fff;
       margin: 0;
       letter-spacing: -0.5px;
+    }
+
+    .sort-dropdown {
+      position: relative;
     }
 
     .table-controls {
@@ -644,14 +654,14 @@ export type SortDirection = 'asc' | 'desc' | null;
       background: var(--bg-elevated);
       border: 1px solid var(--border);
       color: var(--text-secondary);
-      padding: 8px 14px;
+      padding: 8px 10px;
       border-radius: 8px;
       font-size: 13px;
       font-weight: 500;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       transition: all 0.2s ease;
     }
 
@@ -1962,14 +1972,12 @@ export type SortDirection = 'asc' | 'desc' | null;
 
       .table-header {
         flex-direction: column;
-        align-items: flex-start;
         gap: 16px;
       }
 
-      .table-controls {
-        flex-direction: column;
-        align-items: flex-start;
+      .header-row {
         width: 100%;
+        justify-content: space-between;
       }
 
       .sort-menu {
