@@ -241,11 +241,11 @@ export type SortDirection = 'asc' | 'desc' | null;
               <h2>Señales del Día</h2>
               <div class="sort-dropdown">
                 <button class="sort-trigger" (click)="toggleSortMenu()" [class.active]="sortMenuOpen || sortConfigs.length > 0" title="Ordenar">
-                  <svg class="sort-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <svg class="sort-icon-svg" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2">
                     <path d="M3 6h18M7 12h10M12 18h2"/>
                   </svg>
                   <span class="sort-count" *ngIf="sortConfigs.length > 1">{{ sortConfigs.length }}</span>
-                  <svg class="chevron" [class.open]="sortMenuOpen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <svg class="chevron" [class.open]="sortMenuOpen" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2">
                     <path d="M6 9l6 6 6-6"/>
                   </svg>
                 </button>
