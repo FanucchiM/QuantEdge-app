@@ -673,7 +673,7 @@ export type SortDirection = 'asc' | 'desc' | null;
 
     .sort-menu {
       position: absolute;
-      right: 100%;
+      right: 0;
       left: auto;
       top: 100%;
       background: var(--bg-card);
@@ -1958,7 +1958,7 @@ export type SortDirection = 'asc' | 'desc' | null;
       }
 
       .sort-menu {
-        right: 100%;
+        right: 0;
         left: auto;
       }
 
