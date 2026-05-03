@@ -646,67 +646,21 @@ export type SortDirection = 'asc' | 'desc' | null;
       font-weight: 700;
     }
 
-    .sort-dropdown {
+.sort-dropdown {
       position: relative;
     }
 
-    .sort-trigger {
-      background: var(--bg-elevated);
-      border: 1px solid var(--border);
-      color: var(--text-secondary);
-      padding: 8px 10px;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s ease;
-    }
-
-    .sort-trigger:hover,
-    .sort-trigger.active {
-      background: rgba(59, 130, 246, 0.1);
-      border-color: var(--accent);
-      color: var(--text-primary);
-    }
-
-    .sort-icon-svg {
-      width: 18px;
-      height: 18px;
-      flex-shrink: 0;
-    }
-
-    .sort-label-text {
-      flex: 1;
-    }
-
-    .chevron {
-      width: 16px;
-      height: 16px;
-      transition: transform 0.2s ease;
-    }
-
-    .chevron.open {
-      transform: rotate(180deg);
-    }
-
-    .sort-symbol {
-      font-size: 14px;
-    }
-
-    .sort-menu {
+.sort-menu {
       position: absolute;
-      top: calc(100% + 8px);
       right: 0;
       left: auto;
+      top: 100%;
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 8px;
       min-width: 160px;
-      max-width: calc(100vw - 40px);
+      max-width: 90vw;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
       z-index: 100;
       animation: fadeIn 0.2s ease;
