@@ -629,6 +629,27 @@ export type SortDirection = 'asc' | 'desc' | null;
       gap: 6px;
     }
 
+    .sort-trigger {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .sort-trigger svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
     .sort-btn:hover {
       background: rgba(59, 130, 246, 0.1);
       border-color: var(--accent);
