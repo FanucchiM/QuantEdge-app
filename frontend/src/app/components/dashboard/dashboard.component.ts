@@ -650,7 +650,7 @@ export type SortDirection = 'asc' | 'desc' | null;
       position: relative;
     }
 
-.sort-menu {
+    .sort-menu {
       position: absolute;
       right: 0;
       left: auto;
