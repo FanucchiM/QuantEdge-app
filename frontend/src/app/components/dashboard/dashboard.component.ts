@@ -673,8 +673,9 @@ export type SortDirection = 'asc' | 'desc' | null;
 
     .sort-menu {
       position: absolute;
+      left: 0;
       right: 0;
-      left: auto;
+      width: 100%;
       top: 100%;
       background: var(--bg-card);
       border: 1px solid var(--border);
