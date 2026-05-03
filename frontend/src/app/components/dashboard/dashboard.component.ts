@@ -699,7 +699,7 @@ export type SortDirection = 'asc' | 'desc' | null;
     .sort-menu {
       position: absolute;
       top: calc(100% + 8px);
-      right: 0;
+      right: 0 !important;
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 12px;
@@ -1982,8 +1982,8 @@ export type SortDirection = 'asc' | 'desc' | null;
       }
 
       .sort-menu {
-        right: 0;
-        left: auto;
+        right: 0 !important;
+        left: auto !important;
       }
 
       .signals-table th,
