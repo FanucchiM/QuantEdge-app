@@ -2419,9 +2419,7 @@ getRecommendation(signalType: string): string {
     } else if (signalType === 'SELL') {
       return '🔻 SELL - Technical signal negative. Price may fall.';
     }
-    return '⏳ HOLD - No clear signal. Wait for more confirmation.';
-  }
-    return '⏳ HOLD - No clear signal. Wait for more confirmation.';
+return '⏳ HOLD - No clear signal. Wait for more confirmation.';
   }
 
   toggleReasonsExpanded(): void {
