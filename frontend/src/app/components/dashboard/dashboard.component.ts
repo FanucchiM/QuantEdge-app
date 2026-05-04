@@ -2401,7 +2401,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     } else if (signal.signalType === 'SELL') {
       return 'SELL Signal';
     }
-    return 'Mantener';
+    return 'HOLD';
   }
 
   getRecommendationText(signal: Signal): string {
@@ -2419,7 +2419,9 @@ getRecommendation(signalType: string): string {
     } else if (signalType === 'SELL') {
       return '🔻 SELL - Technical signal negative. Price may fall.';
     }
-    return '⏳ MANTENER - Sin señal clara. Esperar más confirmaciones.';
+    return '⏳ HOLD - No clear signal. Wait for more confirmation.';
+  }
+    return '⏳ HOLD - No clear signal. Wait for more confirmation.';
   }
 
   toggleReasonsExpanded(): void {
