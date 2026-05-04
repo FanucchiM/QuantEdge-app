@@ -76,14 +76,14 @@ export type SortDirection = 'asc' | 'desc' | null;
 
           <!-- Análisis en lenguaje natural (arriba del gráfico) -->
           <div class="modal-section" *ngIf="selectedSignal.summary">
-            <h3>Análisis</h3>
+            <h3>Analysis</h3>
             <p class="analysis-text">{{ selectedSignal.summary }}</p>
           </div>
 
           <!-- Gráfico de Estacionalidad -->
           <div class="chart-section">
             <div class="chart-header">
-              <h3>Rendimiento Histórico</h3>
+              <h3>Historical Performance</h3>
             </div>
             
             <div *ngIf="loadingHistory || loadingSeasonality" class="chart-loading">
@@ -107,7 +107,7 @@ export type SortDirection = 'asc' | 'desc' | null;
               <span class="modal-stat-value">\${{ stockHistory.currentPrice | number:'1.2-2' }}</span>
             </div>
             <div class="modal-stat-item">
-              <span class="modal-stat-label">Cambio 24h</span>
+              <span class="modal-stat-label">24h Change</span>
               <span class="modal-stat-value" [class.positive]="stockHistory.priceChange24h > 0" [class.negative]="stockHistory.priceChange24h < 0">
                 {{ stockHistory.priceChange24h > 0 ? '+' : '' }}{{ stockHistory.priceChange24h | number:'1.2-2' }} 
                 ({{ stockHistory.priceChangePercent24h | number:'1.2-2' }}%)
@@ -131,7 +131,7 @@ export type SortDirection = 'asc' | 'desc' | null;
           <!-- Análisis técnico detallado (después del gráfico) -->
           <div class="modal-section" *ngIf="selectedSignal.reasons && selectedSignal.reasons.length > 0">
             <div class="collapsible-header" (click)="toggleReasonsExpanded()">
-              <h3>Detalles Técnicos</h3>
+              <h3>Technical Details</h3>
               <span class="collapsible-chevron" [class.expanded]="reasonsExpanded">▼</span>
             </div>
             <ul class="reasons-list" [class.collapsed]="!reasonsExpanded">
@@ -230,7 +230,7 @@ export type SortDirection = 'asc' | 'desc' | null;
             </div>
             <div class="stat-info">
               <span class="stat-value">{{ totalSignals }}</span>
-              <span class="stat-label">Total Analizadas</span>
+              <span class="stat-label">Total Analyzed</span>
             </div>
           </div>
         </section>
@@ -273,7 +273,7 @@ export type SortDirection = 'asc' | 'desc' | null;
                     class="sort-option" 
                     [class.active]="isColumnSorted('market')"
                     (click)="sortBy('market')">
-                    Mercado
+<th>Market</th>
                     <span class="sort-icon" *ngIf="isColumnSorted('market')">
                       {{ isColumnSorted('market') === 'asc' ? '↑' : '↓' }}
                     </span>
@@ -292,13 +292,13 @@ export type SortDirection = 'asc' | 'desc' | null;
               <thead>
                 <tr>
                   <th class="sortable" (click)="sortBy('companyName', $event)" style="width: 220px;">
-                    <span class="th-text">Nombre</span>
+                    <span class="th-text">Name</span>
                     <span class="th-sort-icon" *ngIf="isColumnSorted('companyName')">
                       {{ isColumnSorted('companyName') === 'asc' ? '↑' : '↓' }}
                     </span>
                   </th>
                   <th class="sortable" (click)="sortBy('market', $event)">
-                    <span class="th-text">Mercado</span>
+                    <span class="th-text">Market</span>
                     <span class="th-sort-icon" *ngIf="isColumnSorted('market')">
                       {{ isColumnSorted('market') === 'asc' ? '↑' : '↓' }}
                     </span>
@@ -311,7 +311,7 @@ export type SortDirection = 'asc' | 'desc' | null;
                   </th>
                   <th>Trend</th>
                   <th>Price</th>
-                  <th>Cambio % 24h</th>
+                  <th>24h Change %</th>
                   <th>VOL</th>
                   <th style="width: 220px;">Sector</th>
                 </tr>
@@ -377,7 +377,7 @@ export type SortDirection = 'asc' | 'desc' | null;
             <div class="error-icon">⚠️</div>
             <h3>Error</h3>
             <p>{{ error }}</p>
-            <button class="retry-btn" (click)="loadSignals()">Reintentar</button>
+            <button class="retry-btn" (click)="loadSignals()">Retry</button>
           </div>
 
           <div *ngIf="!loading && !error && signals.length === 0" class="empty-state">
@@ -2087,7 +2087,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     const labels: Record<string, string> = {
       'companyName': 'Nombre',
       'signalType': 'Signal',
-      'market': 'Market'
+      'market': 'Market',
     };
     return labels[column] || column;
   }
