@@ -600,21 +600,6 @@ export type SortDirection = 'asc' | 'desc' | null;
       color: var(--text-muted);
     }
 
-    .sort-btn {
-      background: var(--bg-elevated);
-      border: 1px solid var(--border);
-      color: var(--text-secondary);
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 12px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
     .sort-trigger {
       background: var(--bg-elevated);
       border: 1px solid var(--border);
@@ -634,18 +619,6 @@ export type SortDirection = 'asc' | 'desc' | null;
       width: 18px;
       height: 18px;
       flex-shrink: 0;
-    }
-
-    .sort-btn:hover {
-      background: rgba(59, 130, 246, 0.1);
-      border-color: var(--accent);
-      color: var(--text-primary);
-    }
-
-    .sort-btn.active {
-      background: rgba(59, 130, 246, 0.15);
-      border-color: var(--accent);
-      color: var(--accent);
     }
 
     .sort-icon {
