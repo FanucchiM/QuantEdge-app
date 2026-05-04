@@ -254,7 +254,6 @@ export type SortDirection = 'asc' | 'desc' | null;
                   <button 
                     class="sort-option" 
                     [class.active]="isColumnSorted('companyName')"
-                    [disabled]="isColumnSorted('companyName') !== null"
                     (click)="sortBy('companyName')">
                     Nombre
                     <span class="sort-icon" *ngIf="isColumnSorted('companyName')">
@@ -264,7 +263,6 @@ export type SortDirection = 'asc' | 'desc' | null;
                   <button 
                     class="sort-option" 
                     [class.active]="isColumnSorted('signalType')"
-                    [disabled]="isColumnSorted('signalType') !== null"
                     (click)="sortBy('signalType')">
                     Señal
                     <span class="sort-icon" *ngIf="isColumnSorted('signalType')">
@@ -274,7 +272,6 @@ export type SortDirection = 'asc' | 'desc' | null;
                   <button 
                     class="sort-option" 
                     [class.active]="isColumnSorted('market')"
-                    [disabled]="isColumnSorted('market') !== null"
                     (click)="sortBy('market')">
                     Mercado
                     <span class="sort-icon" *ngIf="isColumnSorted('market')">
