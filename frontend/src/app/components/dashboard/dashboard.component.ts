@@ -2085,8 +2085,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       const existing = this.sortConfigs[existingIndex];
       if (existing.direction === 'asc') {
         this.sortConfigs[existingIndex].direction = 'desc';
-      } else if (existing.direction === 'desc') {
-        this.sortConfigs[existingIndex].direction = 'asc';
+      } else {
+        this.sortConfigs.splice(existingIndex, 1);
       }
     } else {
       this.sortConfigs.push({ column, direction: 'asc' });
