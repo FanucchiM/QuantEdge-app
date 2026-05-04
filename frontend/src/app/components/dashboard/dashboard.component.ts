@@ -64,7 +64,7 @@ export type SortDirection = 'asc' | 'desc' | null;
             <span class="meta-badge market-cap" *ngIf="stockHistory.marketCap">{{ formatMarketCap(stockHistory.marketCap) }}</span>
           </div>
 
-          <!-- Señal -->
+          <!-- Signal -->
           <div class="modal-signal-pill" [class]="selectedSignal.signalType.toLowerCase()">
             {{ selectedSignal.signalType }}
           </div>
@@ -88,7 +88,7 @@ export type SortDirection = 'asc' | 'desc' | null;
             
             <div *ngIf="loadingHistory || loadingSeasonality" class="chart-loading">
               <div class="spinner-small"></div>
-              <span>Cargando datos...</span>
+              <span>Loading data...</span>
             </div>
             
             <div class="chart-container" *ngIf="!loadingSeasonality && seasonalityData">
@@ -96,14 +96,14 @@ export type SortDirection = 'asc' | 'desc' | null;
             </div>
             
             <div class="chart-container" *ngIf="!loadingSeasonality && !seasonalityData">
-              <div class="chart-error">No hay datos de estacionalidad disponibles</div>
+              <div class="chart-error">No seasonality data available</div>
             </div>
           </div>
 
           <!-- Stats del historial -->
           <div class="modal-stats" *ngIf="stockHistory">
             <div class="modal-stat-item">
-              <span class="modal-stat-label">Precio Actual</span>
+              <span class="modal-stat-label">Current Price</span>
               <span class="modal-stat-value">\${{ stockHistory.currentPrice | number:'1.2-2' }}</span>
             </div>
             <div class="modal-stat-item">
@@ -120,7 +120,7 @@ export type SortDirection = 'asc' | 'desc' | null;
               </span>
             </div>
             <div class="modal-stat-item">
-              <span class="modal-stat-label">Señal Generada</span>
+              <span class="modal-stat-label">Generated Signal</span>
               <span class="modal-stat-value signal-info">
                 \${{ stockHistory.signalGenerated.atPrice | number:'1.2-2' }} 
                 <span class="signal-date">({{ stockHistory.signalGenerated.date }})</span>
@@ -147,7 +147,7 @@ export type SortDirection = 'asc' | 'desc' | null;
 
           <!-- Outras acciones -->
           <div class="related-stocks" *ngIf="signals.length > 1">
-            <h4>Otras acciones</h4>
+            <h4>Other actions</h4>
             <div class="related-stocks-grid">
               <div 
                 *ngFor="let signal of getRelatedSignals()"
@@ -191,7 +191,7 @@ export type SortDirection = 'asc' | 'desc' | null;
             </div>
             <div class="stat-info">
               <span class="stat-value">{{ buyCount }}</span>
-              <span class="stat-label">Señales BUY</span>
+              <span class="stat-label">BUY Signals</span>
             </div>
           </div>
 
@@ -204,7 +204,7 @@ export type SortDirection = 'asc' | 'desc' | null;
             </div>
             <div class="stat-info">
               <span class="stat-value">{{ sellCount }}</span>
-              <span class="stat-label">Señales SELL</span>
+              <span class="stat-label">SELL Signals</span>
             </div>
           </div>
 
@@ -216,7 +216,7 @@ export type SortDirection = 'asc' | 'desc' | null;
             </div>
             <div class="stat-info">
               <span class="stat-value">{{ holdCount }}</span>
-              <span class="stat-label">Señales HOLD</span>
+              <span class="stat-label">HOLD Signals</span>
             </div>
           </div>
 
@@ -238,9 +238,9 @@ export type SortDirection = 'asc' | 'desc' | null;
         <section class="table-section">
           <div class="table-header">
             <div class="header-row">
-              <h2>Señales del Día</h2>
+              <h2>Today's Signals</h2>
               <div class="sort-dropdown">
-                <button class="sort-trigger" (click)="toggleSortMenu()" [class.active]="sortMenuOpen || sortConfigs.length > 0" title="Ordenar">
+                <button class="sort-trigger" (click)="toggleSortMenu()" [class.active]="sortMenuOpen || sortConfigs.length > 0" title="Sort">
                   <svg class="sort-icon-svg" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2">
                     <path d="M3 6h18M7 12h10M12 18h2"/>
                   </svg>
@@ -250,7 +250,7 @@ export type SortDirection = 'asc' | 'desc' | null;
                   </svg>
                 </button>
                 <div class="sort-menu" *ngIf="sortMenuOpen">
-                  <div class="sort-section-title">Agregar ordenamiento</div>
+                  <div class="sort-section-title">Add sorting</div>
                   <button 
                     class="sort-option" 
                     [class.active]="isColumnSorted('companyName')"
@@ -264,7 +264,7 @@ export type SortDirection = 'asc' | 'desc' | null;
                     class="sort-option" 
                     [class.active]="isColumnSorted('signalType')"
                     (click)="sortBy('signalType')">
-                    Señal
+<th>Signal</th>
                     <span class="sort-icon" *ngIf="isColumnSorted('signalType')">
                       {{ isColumnSorted('signalType') === 'asc' ? '↑' : '↓' }}
                     </span>
@@ -279,7 +279,7 @@ export type SortDirection = 'asc' | 'desc' | null;
                     </span>
                   </button>
                   <button *ngIf="sortConfigs.length > 0" class="clear-sort" (click)="clearSort()">
-                    Limpiar todo
+                    Clear all
                   </button>
                 </div>
               </div>
@@ -304,13 +304,13 @@ export type SortDirection = 'asc' | 'desc' | null;
                     </span>
                   </th>
                   <th class="sortable" (click)="sortBy('signalType', $event)">
-                    <span class="th-text">Señal</span>
+                    <span class="th-text">Signal</span>
                     <span class="th-sort-icon" *ngIf="isColumnSorted('signalType')">
                       {{ isColumnSorted('signalType') === 'asc' ? '↑' : '↓' }}
                     </span>
                   </th>
-                  <th>Tendencia</th>
-                  <th>Precio</th>
+                  <th>Trend</th>
+                  <th>Price</th>
                   <th>Cambio % 24h</th>
                   <th>VOL</th>
                   <th style="width: 220px;">Sector</th>
@@ -363,14 +363,14 @@ export type SortDirection = 'asc' | 'desc' | null;
 
           <div *ngIf="loading" class="loading-state">
             <div class="spinner"></div>
-            <p>Cargando señales...</p>
+            <p>Loading signals...</p>
           </div>
 
           <div #scrollSentinel class="scroll-sentinel"></div>
 
           <div *ngIf="loadingMore" class="loading-more">
             <div class="spinner-small"></div>
-            <span>Cargando más...</span>
+            <span>Loading more...</span>
           </div>
 
           <div *ngIf="error" class="error-state">
@@ -382,8 +382,8 @@ export type SortDirection = 'asc' | 'desc' | null;
 
           <div *ngIf="!loading && !error && signals.length === 0" class="empty-state">
             <div class="empty-icon">📊</div>
-            <h3>No hay señales para hoy</h3>
-            <p>Ejecute el análisis desde el servicio Python para obtener señales.</p>
+            <h3>No signals for today</h3>
+            <p>Run analysis from the Python service to get signals.</p>
           </div>
         </section>
 
@@ -2086,8 +2086,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   getColumnLabel(column: string): string {
     const labels: Record<string, string> = {
       'companyName': 'Nombre',
-      'signalType': 'Señal',
-      'market': 'Mercado'
+      'signalType': 'Signal',
+      'market': 'Market'
     };
     return labels[column] || column;
   }
@@ -2164,7 +2164,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         },
         error: (err) => {
           console.error('Error loading signals', err);
-          this.error = 'Error al cargar las señales. Intente de nuevo.';
+          this.error = 'Error loading signals. Try again.';
           this.loading = false;
         }
       });
@@ -2258,7 +2258,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         },
         error: (err) => {
           console.error('Error loading stock history:', err);
-          this.historyError = `No se pudo cargar el historial para ${symbol}. Intenta con otro símbolo.`;
+          this.historyError = `Could not load history for ${symbol}. Try another symbol.`;
           this.loadingHistory = false;
         }
       });
@@ -2397,27 +2397,27 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   getRecommendationTitle(signal: Signal): string {
     if (signal.signalType === 'BUY') {
-      return 'Señal de COMPRA';
+      return 'BUY Signal';
     } else if (signal.signalType === 'SELL') {
-      return 'Señal de VENTA';
+      return 'SELL Signal';
     }
     return 'Mantener';
   }
 
   getRecommendationText(signal: Signal): string {
     if (signal.signalType === 'BUY') {
-      return 'Los indicadores técnicos sugieren una oportunidad de compra. El precio podría subir según el análisis.';
+      return 'Technical indicators suggest a buying opportunity. Price may rise according to analysis.';
     } else if (signal.signalType === 'SELL') {
-      return 'Los indicadores técnicos muestran debilidad. Considera vender o evitar comprar.';
+      return 'Technical indicators show weakness. Consider selling or avoid buying.';
     }
-    return 'Los indicadores no muestran una señal clara. Espera más confirmación antes de actuar.';
+    return 'Technical indicators do not show a clear signal. Wait for more confirmation before acting.';
   }
 
 getRecommendation(signalType: string): string {
     if (signalType === 'BUY') {
-      return '✅ COMPRAR - Señal técnica positiva. Precio podría subir.';
+      return '✅ BUY - Technical signal positive. Price may rise.';
     } else if (signalType === 'SELL') {
-      return '🔻 VENDER - Señal técnica negativa. Precio podría bajar.';
+      return '🔻 SELL - Technical signal negative. Price may fall.';
     }
     return '⏳ MANTENER - Sin señal clara. Esperar más confirmaciones.';
   }
@@ -2429,7 +2429,7 @@ getRecommendation(signalType: string): string {
   getReasonCategory(reason: string): { color: string; label: string; type: string } {
     const lower = reason.toLowerCase();
     if (lower.includes('ema') || lower.includes('tendencia')) {
-      return { color: '#22c55e', label: 'Tendencia', type: 'trend' };
+      return { color: '#22c55e', label: 'Trend', type: 'trend' };
     }
     if (lower.includes('rsi')) {
       return { color: '#f59e0b', label: 'RSI', type: 'rsi' };
