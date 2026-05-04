@@ -250,6 +250,17 @@ export type SortDirection = 'asc' | 'desc' | null;
                   </svg>
                 </button>
                 <div class="sort-menu" *ngIf="sortMenuOpen">
+                  <div class="sort-section-title" *ngIf="sortConfigs.length > 0">Ordenamientos activos</div>
+                  <div class="active-sorts" *ngIf="sortConfigs.length > 0">
+                    <button 
+                      *ngFor="let config of sortConfigs; let i = index"
+                      class="sort-option active-sort"
+                      (click)="sortBy(config.column)">
+                      {{ getColumnLabel(config.column) }}
+                      <span class="sort-icon">{{ config.direction === 'asc' ? '↑' : '↓' }}</span>
+                      <button class="remove-sort" (click)="removeSort(config.column, $event)" title="Quitar">✕</button>
+                    </button>
+                  </div>
                   <div class="sort-section-title">Agregar ordenamiento</div>
                   <button 
                     class="sort-option" 
