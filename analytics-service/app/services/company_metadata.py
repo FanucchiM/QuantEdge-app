@@ -16,7 +16,6 @@ FINNHUB_BASE_URL = os.getenv("FINNHUB_BASE_URL", "https://finnhub.io/api/v1")
 
 CUSTOM_LOGOS = {
     "KO": "https://img.logo.dev/coca-colacompany.com?token=pk_B0mxnLC-SRe4RJbuTTfLDg&size=80&retina=true",
-    "BYMA": "https://img.logo.dev/ticker/BYMA.BA?token=pk_B0mxnLC-SRe4RJbuTTfLDg&size=80&retina=true",
 }
 
 SECTORS = {
@@ -60,7 +59,6 @@ SECTORS = {
     "NFLX": "Consumer Discretionary",
     "ROKU": "Consumer Discretionary",
     "RIVN": "Consumer Discretionary",
-    "LCID": "Consumer Discretionary",
     "MELI": "Consumer Discretionary",
     "TM": "Consumer Discretionary",
     "KO": "Consumer Staples",
@@ -100,7 +98,6 @@ SECTORS = {
     "TEO": "Communication Services",
     "CRESY": "Real Estate",
     "IRCP": "Real Estate",
-    "BYMA": "Financials",
     "BRIO": "Energy",
     "JG": "Consumer Discretionary",
     "GCLA": "Communication Services",
