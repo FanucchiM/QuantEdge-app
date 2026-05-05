@@ -8,15 +8,14 @@
       "XOM", "CVX", "SLB",
       "JNJ", "UNH", "PFE", "ABBV", "MRK", "LLY", "GLOB",
       "UBER", "LYFT", "SNAP", "ROKU", "PLTR", "SNOW", "DDOG", "ZS",
-      "COIN", "RIVN", "LCID", "NIO", "XPEV", "LI",
+      "COIN", "RIVN", "NIO", "XPEV", "LI",
       "IBM", "BA", "MCD", "NKE", "HD", "V", "MA"
     ],
     "AR": [
       "CEPU",
       "BBAR", "BMA",
       "MELI",
-      "BYMA"
-    ],
+      "YPF"
     "EU": [
       "SAP.DE", "ASML.AS", "SHEL.L", "OR.PA",
       "DTE.DE", "ALV.DE",
@@ -124,7 +123,6 @@
     "ZS": "zscaler.com",
     "COIN": "coinbase.com",
     "RIVN": "rivian.com",
-    "LCID": "lucid.com",
     "NIO": "nio.com",
     "XPEV": "xpeng.com",
     "LI": "li-auto.com",
@@ -144,7 +142,6 @@
     "TEO": "telecom.com",
     "CRESY": "cresud.com",
     "IRCP": "irsa.com.ar",
-    "BYMA": "byma.com",
     "BRIO": "brioenergia.com",
     "JG": "jorge.com",
     "GCLA": "clarin.com",

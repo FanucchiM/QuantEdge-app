@@ -248,7 +248,7 @@ npm test -- --code-coverage
 AAPL, GOOGL, MSFT, AMZN, TSLA, NVDA, META, NFLX
 
 ### Argentina
-GGAL, BYMA, YPF, PAMP, SUPV, CEPU
+GGAL, YPF, PAMP, SUPV, CEPU
 
 ---
 
