@@ -174,7 +174,7 @@ public class StockHistoryController {
         return ResponseEntity.ok(Map.of("saved", entities.size()));
     }
 
-    private double round2(double value) {
+    private double round2(Double value) {
         if (value == null) return 0.0;
         return Math.round(value * 100.0) / 100.0;
     }
