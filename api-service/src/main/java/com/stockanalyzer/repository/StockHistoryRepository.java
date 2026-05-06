@@ -16,6 +16,8 @@ public interface StockHistoryRepository extends JpaRepository<StockHistory, Long
 
     List<StockHistory> findBySymbolAndDateAfterOrderByDateAsc(String symbol, LocalDate since);
 
+    List<StockHistory> findBySymbolOrderByDateAsc(String symbol);
+
     @Modifying
     @Transactional
     @Query("DELETE FROM StockHistory h WHERE h.symbol = :symbol")

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Controller for stock history data.
@@ -172,6 +173,99 @@ public class StockHistoryController {
 
         historyRepository.saveAll(entities);
         return ResponseEntity.ok(Map.of("saved", entities.size()));
+    }
+
+    /**
+     * GET /api/stocks/{symbol}/seasonality?years=2026,2025,2024
+     * Calculate monthly historical performance from stock_history.
+     */
+    @GetMapping("/{symbol}/seasonality")
+    public ResponseEntity<?> getSeasonality(
+            @PathVariable String symbol,
+            @RequestParam(defaultValue = "2026,2025,2024") String years) {
+
+        String sym = symbol.toUpperCase();
+
+        List<Integer> yearList = Arrays.stream(years.split(","))
+                .map(String::trim)
+                .map(Integer::parseInt)
+                .collect(Collectors.toList());
+
+        List<StockHistory> rows = historyRepository.findBySymbolOrderByDateAsc(sym);
+
+        if (rows.isEmpty()) {
+            return ResponseEntity.status(404)
+                    .body(Map.of("error", "No history found for " + sym));
+        }
+
+        String[] monthNames = {"Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"};
+        int currentYear = LocalDate.now().getYear();
+        int currentMonth = LocalDate.now().getMonthValue();
+
+        Map<String, List<Double> yearlyReturns = new LinkedHashMap<>();
+
+        for (int year : yearList) {
+            int lastMonth = (year == currentYear) ? currentMonth : 12;
+            List<Double> monthlyReturns = new ArrayList<>();
+
+            for (int month = 1; month <= lastMonth; month++) {
+                final int y = year, m = month;
+
+                List<Double> monthPrices = rows.stream()
+                        .filter(r -> r.getDate().getYear() == y && r.getDate().getMonthValue() == m)
+                        .map(StockHistory::getClosePrice)
+                        .filter(p -> p != null && p > 0)
+                        .collect(Collectors.toList());
+
+                if (monthPrices.size() < 2) {
+                    monthlyReturns.add(0.0);
+                    continue;
+                }
+
+                double first = monthPrices.get(0);
+                double last = monthPrices.get(monthPrices.size() - 1);
+                double ret = ((last - first) / first) * 100;
+                monthlyReturns.add(round2(ret));
+            }
+
+            yearlyReturns.put(String.valueOf(year), monthlyReturns);
+        }
+
+        int maxMonths = yearlyReturns.values().stream()
+                .mapToInt(List::size).max().orElse(0);
+
+        List<Double> avgReturns = new ArrayList<>();
+        for (int i = 0; i < maxMonths; i++) {
+            final int idx = i;
+            List<Double> vals = yearlyReturns.values().stream()
+                    .filter(l -> idx < l.size())
+                    .map(l -> l.get(idx))
+                    .collect(Collectors.toList());
+
+            double avg = vals.isEmpty() ? 0.0
+                    : vals.stream().mapToDouble(Double::doubleValue).average().orElse(0.0);
+            avgReturns.add(round2(avg));
+        }
+
+        List<String> months = Arrays.asList(monthNames).subList(0, maxMonths);
+
+        double bestVal = avgReturns.isEmpty() ? 0 : Collections.max(avgReturns);
+        double worstVal = avgReturns.isEmpty() ? 0 : Collections.min(avgReturns);
+        String bestMonth = avgReturns.isEmpty() ? null : months.get(avgReturns.indexOf(bestVal));
+        String worstMonth = avgReturns.isEmpty() ? null : months.get(avgReturns.indexOf(worstVal));
+        double avgReturn = avgReturns.isEmpty() ? 0
+                : round2(avgReturns.stream().mapToDouble(Double::doubleValue).average().orElse(0));
+
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("years", yearList.stream().map(String::valueOf).collect(Collectors.toList()));
+        result.put("yearlyReturns", yearlyReturns);
+        result.put("monthlyAvg", avgReturns);
+        result.put("months", months);
+        result.put("bestMonth", bestMonth);
+        result.put("worstMonth", worstMonth);
+        result.put("avgReturn", avgReturn);
+
+        return ResponseEntity.ok(result);
     }
 
     private double round2(Double value) {
