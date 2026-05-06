@@ -24,7 +24,10 @@ public interface SignalRepository extends JpaRepository<Signal, Long> {
     
     @Query("SELECT s FROM Signal s WHERE DATE(s.analyzedAt) = DATE(:date)")
     List<Signal> findByAnalyzedAtDate(LocalDateTime date);
-    
+
+    @Query("SELECT s FROM Signal s JOIN FETCH s.stock WHERE s.stock.symbol = :symbol ORDER BY s.analyzedAt DESC LIMIT 1")
+    com.stockanalyzer.model.Signal findTopBySymbolOrderByAnalyzedAtDesc(@Param("symbol") String symbol);
+
     void deleteByStock(Stock stock);
     
     @org.springframework.transaction.annotation.Transactional

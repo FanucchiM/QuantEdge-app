@@ -133,11 +133,60 @@ class Scheduler:
                 market=market
             )
 
+            # Save history to Java DB for charts
+            await self._save_history_to_api(symbol, df)
+
             return create_signal_dict(symbol, market, indicators, signal, current_price, df)
 
         except Exception as e:
             logger.error(f"Error analyzing {symbol}: {e}")
             return None
+
+    def _build_history_payload(self, symbol: str, df) -> list[dict]:
+        """Convert DataFrame to history rows for DB."""
+        df_ind = self.analyzer.get_all_indicators(df.copy())
+        rows = []
+
+        for date, row in df_ind.iterrows():
+            close = row.get('close')
+            if close is None or (isinstance(close, float) and (math.isnan(close) or math.isinf(close))):
+                continue
+
+            rows.append({
+                "symbol": symbol.upper(),
+                "date": date.strftime('%Y-%m-%d') if hasattr(date, 'strftime') else str(date),
+                "closePrice": _safe_float(close),
+                "ema20": _safe_float(row.get('EMA20', 0)),
+                "ema50": _safe_float(row.get('EMA50', 0)),
+                "rsi": _safe_float(row.get('RSI', 50)),
+                "high": _safe_float(row.get('high', 0)),
+                "low": _safe_float(row.get('low', 0)),
+                "volume": _safe_float(row.get('volume', 0)),
+            })
+
+        return rows
+
+    async def _save_history_to_api(self, symbol: str, df) -> None:
+        """Send historical data to Java for storage in stock_history table."""
+        try:
+            payload = self._build_history_payload(symbol, df)
+            if not payload:
+                logger.warning(f"No history rows to save for {symbol}")
+                return
+
+            async with httpx.AsyncClient() as client:
+                resp = await client.post(
+                    f"{API_URL}/api/stocks/{symbol}/history/batch",
+                    json=payload,
+                    timeout=30.0
+                )
+                if resp.status_code == 200:
+                    logger.info(f"History saved for {symbol}: {len(payload)} rows")
+                else:
+                    logger.warning(f"History save failed for {symbol}: {resp.status_code}")
+
+        except Exception as e:
+            logger.warning(f"Error saving history for {symbol}: {e}")
 
     async def run_analysis(self):
         logger.info("Starting daily analysis...")
