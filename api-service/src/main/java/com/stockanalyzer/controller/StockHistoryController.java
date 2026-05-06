@@ -202,7 +202,7 @@ public class StockHistoryController {
         int currentYear = LocalDate.now().getYear();
         int currentMonth = LocalDate.now().getMonthValue();
 
-        Map<String, List<Double> yearlyReturns = new LinkedHashMap<>();
+        Map<String, List<Double>> yearlyReturns = new LinkedHashMap<>();
 
         for (int year : yearList) {
             int lastMonth = (year == currentYear) ? currentMonth : 12;
