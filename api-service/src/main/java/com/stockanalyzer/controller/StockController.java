@@ -37,23 +37,4 @@ public class StockController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-    
-    @GetMapping("/{symbol}/seasonality")
-    public ResponseEntity<?> getStockSeasonality(
-            @PathVariable String symbol,
-            @RequestParam(defaultValue = "2026,2025,2024") String years) {
-        try {
-            String url = analyticsUrl + "/stock/" + symbol + "/seasonality?years=" + years;
-            ResponseEntity<Object> response = restTemplate.exchange(
-                url,
-                HttpMethod.GET,
-                null,
-                Object.class
-            );
-            return ResponseEntity.ok(response.getBody());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
-                    .body(Map.of("error", "Analytics service unavailable: " + e.getMessage()));
-        }
-    }
 }
