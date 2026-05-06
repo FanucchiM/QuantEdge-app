@@ -210,7 +210,7 @@ describe('SignalService', () => {
         monthlyAvg: [1.1, 2.2, 3.3]
       };
 
-      service.getStockSeasonality('AAPL', '2026,2025').subscribe((response) => {
+      service.getStockSeasonality('AAPL', '2026').subscribe((response) => {
         expect(response.years).toEqual(['2026', '2025']);
       });
 
@@ -228,12 +228,12 @@ describe('SignalService', () => {
       };
 
       service.getStockSeasonality('AAPL').subscribe((response) => {
-        expect(response.years.length).toBe(3);
+        expect(response.years.length).toBe(2);
       });
 
       const req = httpMock.expectOne((request) => {
         return request.url === `${environment.apiUrl}/stocks/AAPL/seasonality` &&
-               request.params.get('years') === '2026,2025,2024';
+               request.params.get('years') === '2026,2025';
       });
       req.flush(mockSeasonality);
     });

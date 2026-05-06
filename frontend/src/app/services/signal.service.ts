@@ -43,7 +43,7 @@ export class SignalService {
     return this.http.get<StockHistory>(`${this.apiUrl}/stocks/${symbol}/history`, { params });
   }
 
-  getStockSeasonality(symbol: string, years: string = '2026,2025,2024'): Observable<any> {
+  getStockSeasonality(symbol: string, years: string = '2026,2025'): Observable<any> {
     const params = new HttpParams()
       .set('years', years);
     
