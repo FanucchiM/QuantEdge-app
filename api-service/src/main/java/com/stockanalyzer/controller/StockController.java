@@ -38,25 +38,6 @@ public class StockController {
                 .orElse(ResponseEntity.notFound().build());
     }
     
-    @GetMapping("/{symbol}/history")
-    public ResponseEntity<?> getStockHistory(
-            @PathVariable String symbol,
-            @RequestParam(defaultValue = "60") int days) {
-        try {
-            String url = analyticsUrl + "/stock/" + symbol + "/history?days=" + days;
-            ResponseEntity<Map> response = restTemplate.exchange(
-                url,
-                HttpMethod.GET,
-                null,
-                Map.class
-            );
-            return ResponseEntity.ok(response.getBody());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
-                    .body(Map.of("error", "Analytics service unavailable: " + e.getMessage()));
-        }
-    }
-    
     @GetMapping("/{symbol}/seasonality")
     public ResponseEntity<?> getStockSeasonality(
             @PathVariable String symbol,
