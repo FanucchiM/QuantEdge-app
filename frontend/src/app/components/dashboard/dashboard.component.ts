@@ -248,12 +248,16 @@ export type SortDirection = 'asc' | 'desc' | null;
               placeholder="Search by name..."
               [(ngModel)]="searchQuery"
               (input)="onSearchChange()">
+            <button *ngIf="searchQuery" class="clear-search-btn" (click)="clearSearch()">×</button>
           </div>
           <button class="filter-btn" title="Filters">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M12 3v18M3 9h18M3 15h18"/>
             </svg>
           </button>
+        </div>
+        <div *ngIf="searchError" class="search-error">
+          <span>{{ searchError }}</span>
         </div>
 
         <section class="table-section">
@@ -655,6 +659,38 @@ export type SortDirection = 'asc' | 'desc' | null;
 
     .search-bar .search-input::placeholder {
       color: #9CA3AF;
+    }
+
+    .clear-search-btn {
+      background: rgba(255,255,255,0.1);
+      border: none;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      color: #9CA3AF;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .clear-search-btn:hover {
+      background: rgba(255,255,255,0.2);
+      color: #fff;
+    }
+
+    .search-error {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 6px;
+      padding: 8px 12px;
+      margin-bottom: 12px;
+      font-size: 13px;
+      color: #FCA5A5;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .filter-btn {
@@ -2123,6 +2159,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   sortConfigs: SortConfig[] = [];
   
   searchQuery = '';
+  searchError = '';
   analysisDate = '';
   
   private currentPage = 0;
@@ -2243,7 +2280,24 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onSearchChange(): void {
-    // Search is instant - filtered in sortedSignals getter
+    this.searchError = '';
+    
+    if (!this.searchQuery || !this.searchQuery.trim()) {
+      return;
+    }
+    
+    const filtered = this.signals.filter(s => 
+      s.companyName && s.companyName.toLowerCase().includes(this.searchQuery.toLowerCase().trim())
+    );
+    
+    if (filtered.length === 0) {
+      this.searchError = 'No results found. Try a different name.';
+    }
+  }
+
+  clearSearch(): void {
+    this.searchQuery = '';
+    this.searchError = '';
   }
 
   ngOnInit(): void {
