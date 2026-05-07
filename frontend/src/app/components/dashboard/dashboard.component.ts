@@ -236,30 +236,33 @@ export type SortDirection = 'asc' | 'desc' | null;
         </section>
 
         <section class="table-section">
+          <!-- Fila 1: buscador + filtros -->
+          <div class="search-row">
+            <div class="search-bar">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="M21 21l-4.35-4.35"></path>
+              </svg>
+              <input 
+                type="text" 
+                class="search-input" 
+                placeholder="Search by name..."
+                [(ngModel)]="searchQuery"
+                (input)="onSearchChange()">
+            </div>
+            <button class="filter-btn" title="Filters">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 3v18M3 9h18M3 15h18"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Fila 2: título + fecha + ordenamiento -->
           <div class="table-header">
             <div class="header-row">
               <div class="header-left">
                 <h2>Today's Signals</h2>
                 <span class="analysis-date" *ngIf="analysisDate">{{ analysisDate }}</span>
-              </div>
-              <div class="header-right">
-                <div class="search-bar">
-                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <path d="M21 21l-4.35-4.35"></path>
-                  </svg>
-                  <input 
-                    type="text" 
-                    class="search-input" 
-                    placeholder="Search by name..."
-                    [(ngModel)]="searchQuery"
-                    (input)="onSearchChange()">
-                </div>
-                <button class="filter-btn" title="Filters">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 3v18M3 9h18M3 15h18"/>
-                  </svg>
-                </button>
               </div>
               <div class="sort-dropdown">
                 <button class="sort-trigger" (click)="toggleSortMenu()" [class.active]="sortMenuOpen || sortConfigs.length > 0" title="Sort">
@@ -613,6 +616,17 @@ export type SortDirection = 'asc' | 'desc' | null;
       display: flex;
       align-items: center;
       gap: 12px;
+    }
+
+    .search-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .search-row .search-bar {
+      flex: 1;
     }
 
     .search-bar {
