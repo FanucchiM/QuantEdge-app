@@ -2139,43 +2139,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   private destroyRef = inject(DestroyRef);
   
 
-  constructor(private signalService: SignalService) {}
-
-  get sortedSignals(): Signal[] {
-    if (this.sortConfigs.length === 0 && (!this.sortColumn || !this.sortDirection)) {
-      return this.signals;
-    }
-    
-    const configs = [...this.sortConfigs];
-    if (this.sortColumn && this.sortDirection) {
-      configs.push({ column: this.sortColumn, direction: this.sortDirection });
-    }
-    
-    if (configs.length === 0) return this.signals;
-    
-    return [...this.signals].sort((a, b) => {
-      for (const config of configs) {
-        let comparison = 0;
-        
-        if (config.column === 'companyName') {
-          const nameA = (a.companyName || a.symbol || '').toLowerCase();
-          const nameB = (b.companyName || b.symbol || '').toLowerCase();
-          comparison = nameA.localeCompare(nameB);
-        } else if (config.column === 'signalType') {
-          const signalOrder: Record<string, number> = { 'BUY': 1, 'SELL': 3, 'HOLD': 2 };
-          comparison = signalOrder[a.signalType] - signalOrder[b.signalType];
-        } else if (config.column === 'market') {
-          const marketOrder: Record<string, number> = { 'AR': 1, 'US': 2, 'EU': 3, 'JP': 4 };
-          comparison = (marketOrder[a.market] || 4) - (marketOrder[b.market] || 4);
-        }
-        
-        if (comparison !== 0) {
-          return config.direction === 'asc' ? comparison : -comparison;
-        }
-      }
-      return 0;
-    });
-  }
+constructor(private signalService: SignalService) {}
 
   sortBy(column: 'companyName' | 'signalType' | 'market', event?: MouseEvent): void {
     const existingIndex = this.sortConfigs.findIndex(c => c.column === column);
