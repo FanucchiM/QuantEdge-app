@@ -260,7 +260,14 @@ export type SortDirection = 'asc' | 'desc' | null;
             </svg>
           </button>
         </div>
-        <div class="search-error" *ngIf="searchError">{{ searchError }}</div>
+        <div class="search-error" *ngIf="searchError">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          {{ searchError }}
+        </div>
 
         <section class="table-section">
           <div class="table-header">
@@ -667,16 +674,24 @@ export type SortDirection = 'asc' | 'desc' | null;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: none;
+      background: #374151;
       border: none;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
       cursor: pointer;
       padding: 0;
+      transition: all 0.2s;
     }
 
     .clear-search svg {
-      width: 16px;
-      height: 16px;
+      width: 12px;
+      height: 12px;
       stroke: #9CA3AF;
+    }
+
+    .clear-search:hover {
+      background: #4B5563;
     }
 
     .clear-search:hover svg {
@@ -684,9 +699,24 @@ export type SortDirection = 'asc' | 'desc' | null;
     }
 
     .search-error {
-      color: #EF4444;
-      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 8px;
+      padding: 10px 14px;
       margin-bottom: 12px;
+      font-size: 14px;
+      color: #FCA5A5;
+    }
+
+    .search-error svg {
+      width: 18px;
+      height: 18px;
+      stroke: #FCA5A5;
+      flex-shrink: 0;
+    }
     }
 
     .filter-btn {
