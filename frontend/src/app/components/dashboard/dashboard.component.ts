@@ -726,13 +726,19 @@ export type SortDirection = 'asc' | 'desc' | null;
 
     @media (max-width: 640px) {
       .header-row {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 8px;
       }
 
-      .header-right {
-        width: 100%;
+      .header-left {
+        flex-shrink: 0;
+      }
+
+      .header-controls {
+        display: flex;
+        align-items: center;
+        gap: 8px;
       }
 
       .search-bar {
