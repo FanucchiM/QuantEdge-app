@@ -638,7 +638,7 @@ export type SortDirection = 'asc' | 'desc' | null;
       display: flex;
       align-items: center;
       gap: 12px;
-      margin-bottom: 12px;
+      margin: 20px 0 12px;
     }
 
     .search-row .search-bar {
