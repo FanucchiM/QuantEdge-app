@@ -233,31 +233,30 @@ export type SortDirection = 'asc' | 'desc' | null;
               <span class="stat-label">Total Analyzed</span>
             </div>
           </div>
-        </section>
+</section>
+
+        <!-- Fila 1: buscador + filtros -->
+        <div class="search-row">
+          <div class="search-bar">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="M21 21l-4.35-4.35"></path>
+            </svg>
+            <input 
+              type="text" 
+              class="search-input" 
+              placeholder="Search by name..."
+              [(ngModel)]="searchQuery"
+              (input)="onSearchChange()">
+          </div>
+          <button class="filter-btn" title="Filters">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 3v18M3 9h18M3 15h18"/>
+            </svg>
+          </button>
+        </div>
 
         <section class="table-section">
-          <!-- Fila 1: buscador + filtros -->
-          <div class="search-row">
-            <div class="search-bar">
-              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="11" cy="11" r="8"></circle>
-                <path d="M21 21l-4.35-4.35"></path>
-              </svg>
-              <input 
-                type="text" 
-                class="search-input" 
-                placeholder="Search by name..."
-                [(ngModel)]="searchQuery"
-                (input)="onSearchChange()">
-            </div>
-            <button class="filter-btn" title="Filters">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 3v18M3 9h18M3 15h18"/>
-              </svg>
-            </button>
-          </div>
-
-          <!-- Fila 2: título + fecha + ordenamiento -->
           <div class="table-header">
             <div class="header-row">
               <div class="header-left">
