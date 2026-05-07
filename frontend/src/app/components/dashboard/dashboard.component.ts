@@ -307,7 +307,7 @@ export type SortDirection = 'asc' | 'desc' | null;
                   </button>
                 </div>
               </div>
-              <button class="filter-btn" title="Filters">
+              <button class="filter-btn" (click)="toggleFilterMenu()" [class.active]="filterMenuOpen || hasActiveFilters()" title="Filters">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <line x1="4" y1="6" x2="20" y2="6"/>
                   <line x1="4" y1="12" x2="20" y2="12"/>
@@ -316,8 +316,63 @@ export type SortDirection = 'asc' | 'desc' | null;
                   <circle cx="16" cy="12" r="2" fill="currentColor"/>
                   <circle cx="10" cy="18" r="2" fill="currentColor"/>
                 </svg>
+                <span class="filter-count" *ngIf="getActiveFilterCount() > 0">{{ getActiveFilterCount() }}</span>
               </button>
-              <div class="sort-backdrop" *ngIf="sortMenuOpen" (click)="toggleSortMenu()"></div>
+              <div class="filter-menu" *ngIf="filterMenuOpen">
+                <div class="filter-section">
+                  <div class="filter-section-title">Signal Type</div>
+                  <label class="filter-option">
+                    <input type="checkbox" [checked]="isFilterValue('signalType', 'BUY')" (change)="toggleFilterValue('signalType', 'BUY')">
+                    <span class="filter-label buy">BUY</span>
+                  </label>
+                  <label class="filter-option">
+                    <input type="checkbox" [checked]="isFilterValue('signalType', 'SELL')" (change)="toggleFilterValue('signalType', 'SELL')">
+                    <span class="filter-label sell">SELL</span>
+                  </label>
+                  <label class="filter-option">
+                    <input type="checkbox" [checked]="isFilterValue('signalType', 'HOLD')" (change)="toggleFilterValue('signalType', 'HOLD')">
+                    <span class="filter-label hold">HOLD</span>
+                  </label>
+                </div>
+                <div class="filter-section">
+                  <div class="filter-section-title">Market</div>
+                  <label class="filter-option">
+                    <input type="checkbox" [checked]="isFilterValue('market', 'US')" (change)="toggleFilterValue('market', 'US')">
+                    <span class="filter-label">US</span>
+                  </label>
+                  <label class="filter-option">
+                    <input type="checkbox" [checked]="isFilterValue('market', 'AR')" (change)="toggleFilterValue('market', 'AR')">
+                    <span class="filter-label">AR</span>
+                  </label>
+                  <label class="filter-option">
+                    <input type="checkbox" [checked]="isFilterValue('market', 'EU')" (change)="toggleFilterValue('market', 'EU')">
+                    <span class="filter-label">EU</span>
+                  </label>
+                  <label class="filter-option">
+                    <input type="checkbox" [checked]="isFilterValue('market', 'JP')" (change)="toggleFilterValue('market', 'JP')">
+                    <span class="filter-label">JP</span>
+                  </label>
+                </div>
+                <div class="filter-section">
+                  <div class="filter-section-title">Trend</div>
+                  <label class="filter-option">
+                    <input type="checkbox" [checked]="isFilterValue('trend', 'ALCISTA')" (change)="toggleFilterValue('trend', 'ALCISTA')">
+                    <span class="filter-label bullish">BULLISH</span>
+                  </label>
+                  <label class="filter-option">
+                    <input type="checkbox" [checked]="isFilterValue('trend', 'BAJISTA')" (change)="toggleFilterValue('trend', 'BAJISTA')">
+                    <span class="filter-label bearish">BEARISH</span>
+                  </label>
+                  <label class="filter-option">
+                    <input type="checkbox" [checked]="isFilterValue('trend', 'LATERAL')" (change)="toggleFilterValue('trend', 'LATERAL')">
+                    <span class="filter-label lateral">LATERAL</span>
+                  </label>
+                </div>
+                <button *ngIf="hasActiveFilters()" class="clear-filters" (click)="clearFilters()">
+                  Clear all
+                </button>
+              </div>
+              <div class="filter-backdrop" *ngIf="filterMenuOpen" (click)="toggleFilterMenu()"></div>
               </div>
             </div>
           </div>
@@ -744,6 +799,39 @@ export type SortDirection = 'asc' | 'desc' | null;
       .search-bar {
         flex: 1;
       }
+
+      .filter-menu {
+        position: fixed;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        max-width: 100%;
+        border-radius: 16px 16px 0 0;
+        max-height: 60vh;
+        overflow-y: auto;
+        padding: 16px;
+      }
+
+      .filter-section {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 12px;
+      }
+
+      .filter-section-title {
+        width: 100%;
+        margin-bottom: 0;
+      }
+
+      .filter-option {
+        flex: 1 1 calc(50% - 4px);
+        justify-content: center;
+      }
     }
 
     .sort-dropdown {
@@ -900,6 +988,152 @@ export type SortDirection = 'asc' | 'desc' | null;
     .remove-sort:hover {
       background: rgba(239, 68, 68, 0.2);
       color: var(--sell);
+    }
+
+    .filter-btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .filter-btn:hover {
+      background: var(--bg-elevated);
+      border-color: var(--accent);
+    }
+
+    .filter-btn.active {
+      background: rgba(59, 130, 246, 0.15);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .filter-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .filter-count {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: var(--accent);
+      color: white;
+      font-size: 10px;
+      font-weight: 600;
+      min-width: 16px;
+      height: 16px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
+    }
+
+    .filter-menu {
+      position: absolute;
+      right: 0 !important;
+      left: auto !important;
+      width: 180px;
+      top: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 8px;
+      min-width: 180px;
+      max-width: 90vw;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      z-index: 100;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .filter-section {
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 8px;
+    }
+
+    .filter-section:last-of-type {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .filter-section-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 4px 8px;
+      margin-bottom: 4px;
+    }
+
+    .filter-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .filter-option:hover {
+      background: var(--bg-elevated);
+    }
+
+    .filter-option input[type="checkbox"] {
+      width: 14px;
+      height: 14px;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    .filter-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    .filter-label.buy { color: var(--buy); }
+    .filter-label.sell { color: var(--sell); }
+    .filter-label.hold { color: var(--hold); }
+    .filter-label.bullish { color: #22c55e; }
+    .filter-label.bearish { color: #ef4444; }
+    .filter-label.lateral { color: #64748b; }
+
+    .clear-filters {
+      width: 100%;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 8px;
+    }
+
+    .clear-filters:hover {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--sell);
+    }
+
+    .filter-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 50;
     }
 
     .clear-sort {
@@ -2149,6 +2383,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('seasonalityChart') seasonalityChartRef!: ElementRef;
   
   signals: Signal[] = [];
+  filteredSignals: Signal[] = [];
+  allSignals: Signal[] = [];
   selectedSignal: Signal | null = null;
   stockHistory: StockHistory | null = null;
   loading = false;
@@ -2177,6 +2413,13 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   sortMenuOpen = false;
   sortConfigs: SortConfig[] = [];
   
+  filterMenuOpen = false;
+  filterConfigs: { type: string; values: string[] }[] = [
+    { type: 'signalType', values: [] },
+    { type: 'market', values: [] },
+    { type: 'trend', values: [] }
+  ];
+  
   searchQuery = '';
   searchError = '';
   analysisDate = '';
@@ -2192,7 +2435,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(private signalService: SignalService) {}
 
   get sortedSignals(): Signal[] {
-    let result = this.signals;
+    let result = this.filteredSignals;
     
     // Filter by search query
     if (this.searchQuery && this.searchQuery.trim()) {
@@ -2298,25 +2541,88 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.sortMenuOpen = !this.sortMenuOpen;
   }
 
+  toggleFilterMenu(): void {
+    this.filterMenuOpen = !this.filterMenuOpen;
+  }
+
+  isFilterValue(type: string, value: string): boolean {
+    const config = this.filterConfigs.find(f => f.type === type);
+    return config ? config.values.includes(value) : false;
+  }
+
+  toggleFilterValue(type: string, value: string): void {
+    const config = this.filterConfigs.find(f => f.type === type);
+    if (!config) return;
+    
+    const index = config.values.indexOf(value);
+    if (index === -1) {
+      config.values.push(value);
+    } else {
+      config.values.splice(index, 1);
+    }
+  }
+
+  hasActiveFilters(): boolean {
+    return this.filterConfigs.some(f => f.values.length > 0);
+  }
+
+  getActiveFilterCount(): number {
+    return this.filterConfigs.reduce((sum, f) => sum + f.values.length, 0);
+  }
+
+  clearFilters(): void {
+    this.filterConfigs.forEach(f => f.values = []);
+    this.applyFilters();
+  }
+
+  applyFilters(): void {
+    let result = [...this.allSignals];
+    
+    const signalTypes = this.filterConfigs.find(f => f.type === 'signalType')?.values || [];
+    if (signalTypes.length > 0) {
+      result = result.filter(s => signalTypes.includes(s.signalType));
+    }
+    
+    const markets = this.filterConfigs.find(f => f.type === 'market')?.values || [];
+    if (markets.length > 0) {
+      result = result.filter(s => markets.includes(s.market));
+    }
+    
+    const trends = this.filterConfigs.find(f => f.type === 'trend')?.values || [];
+    if (trends.length > 0) {
+      result = result.filter(s => trends.includes(s.trend));
+    }
+    
+    // Apply search query
+    if (this.searchQuery && this.searchQuery.trim()) {
+      const query = this.searchQuery.toLowerCase().trim();
+      result = result.filter(s => 
+        (s.companyName && s.companyName.toLowerCase().includes(query))
+      );
+      
+      if (result.length === 0) {
+        this.searchError = 'No results found. Try a different name.';
+      } else {
+        this.searchError = '';
+      }
+    } else {
+      this.searchError = '';
+    }
+    
+    this.filteredSignals = result;
+    this.signals = result;
+    this.updateCounts();
+  }
+
   onSearchChange(): void {
     this.searchError = '';
-    
-    if (!this.searchQuery || !this.searchQuery.trim()) {
-      return;
-    }
-    
-    const filtered = this.signals.filter(s => 
-      s.companyName && s.companyName.toLowerCase().includes(this.searchQuery.toLowerCase().trim())
-    );
-    
-    if (filtered.length === 0) {
-      this.searchError = 'No results found. Try a different name.';
-    }
+    this.applyFilters();
   }
 
   clearSearch(): void {
     this.searchQuery = '';
     this.searchError = '';
+    this.applyFilters();
   }
 
   ngOnInit(): void {
@@ -2359,19 +2665,21 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.error = null;
     this.currentPage = 0;
     
-    this.signalService.getSignals(0, this.pageSize)
+    this.signalService.getTodaySignals()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (data) => {
-          this.signals = data.content;
-          this.totalSignals = data.totalElements;
-          this.totalPages = data.totalPages;
-          this.hasMore = !data.last;
+        next: (allSignals) => {
+          this.allSignals = allSignals;
+          this.signals = allSignals;
+          this.filteredSignals = allSignals;
+          this.totalSignals = allSignals.length;
+          this.hasMore = false;
           this.loading = false;
+          this.updateCounts(allSignals);
           
           // Get analysis date from first signal
-          if (data.content.length > 0 && data.content[0].analyzedAt) {
-            const date = new Date(data.content[0].analyzedAt);
+          if (allSignals.length > 0 && allSignals[0].analyzedAt) {
+            const date = new Date(allSignals[0].analyzedAt);
             this.analysisDate = date.toLocaleDateString('en-US', { 
               month: 'short', day: 'numeric', year: 'numeric' 
             });
@@ -2383,16 +2691,13 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
           this.loading = false;
         }
       });
-    
-    this.signalService.getTodaySignals()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (allSignals) => {
-          this.buyCount = allSignals.filter(s => s.signalType === 'BUY').length;
-          this.sellCount = allSignals.filter(s => s.signalType === 'SELL').length;
-          this.holdCount = allSignals.filter(s => s.signalType === 'HOLD').length;
-        }
-      });
+  }
+
+  updateCounts(signals?: Signal[]): void {
+    const data = signals || this.filteredSignals;
+    this.buyCount = data.filter(s => s.signalType === 'BUY').length;
+    this.sellCount = data.filter(s => s.signalType === 'SELL').length;
+    this.holdCount = data.filter(s => s.signalType === 'HOLD').length;
   }
 
   loadMoreSignals(): void {
