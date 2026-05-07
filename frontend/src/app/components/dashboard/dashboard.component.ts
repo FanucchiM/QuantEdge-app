@@ -162,8 +162,9 @@ export type SortDirection = 'asc' | 'desc' | null;
                   <span class="trend" [ngClass]="getTrendClass(signal.trend)">
                     {{ getTrendIcon(signal.trend) }} {{ signal.trend }}
                   </span>
-                </div>
+</div>
               </div>
+              <div class="menu-backdrop" *ngIf="sortMenuOpen || filterMenuOpen" (click)="closeMenus()"></div>
             </div>
           </div>
         </div>
@@ -373,7 +374,6 @@ export type SortDirection = 'asc' | 'desc' | null;
                     Clear all
                   </button>
                 </div>
-                <div class="filter-backdrop" *ngIf="filterMenuOpen" (click)="toggleFilterMenu()"></div>
               </div>
               </div>
             </div>
@@ -1131,7 +1131,7 @@ export type SortDirection = 'asc' | 'desc' | null;
       color: var(--sell);
     }
 
-    .filter-backdrop {
+    .menu-backdrop {
       position: fixed;
       top: 0;
       left: 0;
@@ -2536,10 +2536,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   toggleSortMenu(): void {
     this.sortMenuOpen = !this.sortMenuOpen;
+    this.filterMenuOpen = false;
   }
 
   toggleFilterMenu(): void {
     this.filterMenuOpen = !this.filterMenuOpen;
+    this.sortMenuOpen = false;
+  }
+
+  closeMenus(): void {
+    this.sortMenuOpen = false;
+    this.filterMenuOpen = false;
   }
 
   isFilterValue(type: string, value: string): boolean {
@@ -2557,6 +2564,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     } else {
       config.values.splice(index, 1);
     }
+    this.applyFilters();
   }
 
   hasActiveFilters(): boolean {
