@@ -248,25 +248,12 @@ export type SortDirection = 'asc' | 'desc' | null;
               placeholder="Search by name..."
               [(ngModel)]="searchQuery"
               (input)="onSearchChange()">
-            <button class="clear-search" *ngIf="searchQuery" (click)="clearSearch()" title="Clear search">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M18 6L6 18M6 6l12 12"/>
-              </svg>
-            </button>
           </div>
           <button class="filter-btn" title="Filters">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M12 3v18M3 9h18M3 15h18"/>
             </svg>
           </button>
-        </div>
-        <div class="search-error" *ngIf="searchError">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"></circle>
-            <line x1="12" y1="8" x2="12" y2="12"></line>
-            <line x1="12" y1="16" x2="12.01" y2="16"></line>
-          </svg>
-          {{ searchError }}
         </div>
 
         <section class="table-section">
@@ -668,55 +655,6 @@ export type SortDirection = 'asc' | 'desc' | null;
 
     .search-bar .search-input::placeholder {
       color: #9CA3AF;
-    }
-
-    .clear-search {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #374151;
-      border: none;
-      border-radius: 50%;
-      width: 20px;
-      height: 20px;
-      cursor: pointer;
-      padding: 0;
-      transition: all 0.2s;
-    }
-
-    .clear-search svg {
-      width: 12px;
-      height: 12px;
-      stroke: #9CA3AF;
-    }
-
-    .clear-search:hover {
-      background: #4B5563;
-    }
-
-    .clear-search:hover svg {
-      stroke: #fff;
-    }
-
-    .search-error {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(239, 68, 68, 0.1);
-      border: 1px solid rgba(239, 68, 68, 0.3);
-      border-radius: 8px;
-      padding: 10px 14px;
-      margin-bottom: 12px;
-      font-size: 14px;
-      color: #FCA5A5;
-    }
-
-    .search-error svg {
-      width: 18px;
-      height: 18px;
-      stroke: #FCA5A5;
-      flex-shrink: 0;
-    }
     }
 
     .filter-btn {
@@ -2185,7 +2123,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   sortConfigs: SortConfig[] = [];
   
   searchQuery = '';
-  searchError = '';
   analysisDate = '';
   
   private currentPage = 0;
@@ -2306,24 +2243,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onSearchChange(): void {
-    this.searchError = '';
-    
-    if (!this.searchQuery || !this.searchQuery.trim()) {
-      return;
-    }
-    
-    const filtered = this.signals.filter(s => 
-      s.companyName && s.companyName.toLowerCase().includes(this.searchQuery.toLowerCase().trim())
-    );
-    
-    if (filtered.length === 0) {
-      this.searchError = 'No results found. Try a different name.';
-    }
-  }
-
-  clearSearch(): void {
-    this.searchQuery = '';
-    this.searchError = '';
+    // Search is instant - filtered in sortedSignals getter
   }
 
   ngOnInit(): void {
