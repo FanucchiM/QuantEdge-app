@@ -238,8 +238,31 @@ export type SortDirection = 'asc' | 'desc' | null;
         <section class="table-section">
           <div class="table-header">
             <div class="header-row">
-              <h2>Today's Signals</h2>
-              <div class="sort-dropdown">
+              <div class="header-left">
+                <h2>Today's Signals</h2>
+                <span class="analysis-date" *ngIf="analysisDate">{{ analysisDate }}</span>
+              </div>
+              <div class="header-right">
+                <div class="search-bar">
+                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="M21 21l-4.35-4.35"></path>
+                  </svg>
+                  <input 
+                    type="text" 
+                    class="search-input" 
+                    placeholder="Search by name..."
+                    [(ngModel)]="searchQuery"
+                    (input)="onSearchChange()">
+                </div>
+                <button class="filter-trigger" (click)="toggleFilterMenu()" [class.active]="filterMenuOpen" title="Filters">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 3v18M3 9h18M3 15h18"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="sort-dropdown">
                 <button class="sort-trigger" (click)="toggleSortMenu()" [class.active]="sortMenuOpen || sortConfigs.length > 0" title="Sort">
                   <svg class="sort-icon-svg" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2">
                     <path d="M3 6h18M7 12h10M12 18h2"/>
@@ -569,8 +592,112 @@ export type SortDirection = 'asc' | 'desc' | null;
       letter-spacing: -0.5px;
     }
 
-    .sort-dropdown {
+.sort-dropdown {
       position: relative;
+    }
+
+    .header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .header-left {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .header-left h2 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .analysis-date {
+      font-size: 14px;
+      color: #6B7280;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+      background: #F3F4F6;
+      border-radius: 8px;
+      padding: 8px 12px;
+      gap: 8px;
+      width: 220px;
+    }
+
+    .search-bar .search-icon {
+      width: 18px;
+      height: 18px;
+      color: #9CA3AF;
+    }
+
+    .search-bar .search-input {
+      border: none;
+      background: transparent;
+      outline: none;
+      font-size: 14px;
+      color: #111827;
+      width: 100%;
+    }
+
+    .search-bar .search-input::placeholder {
+      color: #9CA3AF;
+    }
+
+    .filter-trigger {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      background: #F3F4F6;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .filter-trigger:hover {
+      background: #E5E7EB;
+    }
+
+    .filter-trigger svg {
+      width: 18px;
+      height: 18px;
+      stroke: #6B7280;
+    }
+
+    .filter-trigger.active {
+      background: #E5E7EB;
+    }
+
+    @media (max-width: 640px) {
+      .header-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .header-right {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .search-bar {
+        flex: 1;
+      }
     }
 
     .table-controls {
@@ -2000,6 +2127,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   sortMenuOpen = false;
   sortConfigs: SortConfig[] = [];
   
+  searchQuery = '';
+  filterMenuOpen = false;
+  analysisDate = '';
+  
   private currentPage = 0;
   private pageSize = 100;
   private totalPages = 1;
@@ -2105,13 +2236,54 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   toggleSortMenu(): void {
     this.sortMenuOpen = !this.sortMenuOpen;
+    this.filterMenuOpen = false;
+  }
+
+  toggleFilterMenu(): void {
+    this.filterMenuOpen = !this.filterMenuOpen;
+    this.sortMenuOpen = false;
+  }
+
+  onSearchChange(): void {
+    // Search is instant, filtered in getter
+  }
+
+  get sortedSignals(): Signal[] {
+    let result = this.signals;
+    
+    // Filter by search query
+    if (this.searchQuery && this.searchQuery.trim()) {
+      const query = this.searchQuery.toLowerCase().trim();
+      result = result.filter(s => 
+        (s.companyName && s.companyName.toLowerCase().includes(query))
+      );
+    }
+    
+    // Apply sorting
+    if (this.sortConfigs.length === 0 && (!this.sortColumn || !this.sortDirection)) {
+      return result;
+    }
+    
+    const configs = [...this.sortConfigs];
+    if (this.sortColumn && this.sortDirection) {
+      configs.push({ column: this.sortColumn, direction: this.sortDirection });
+    }
+    
+    if (configs.length === 0) return result;
+    
+    return [...result].sort((a, b) => {
+      for (const config of configs) {
+        const aVal = a[config.column];
+        const bVal = b[config.column];
+        if (aVal === bVal) continue;
+        const cmp = aVal < bVal ? -1 : 1;
+        return config.direction === 'asc' ? cmp : -cmp;
+      }
+      return 0;
+    });
   }
 
   ngOnInit(): void {
-    this.loadSignals();
-  }
-
-  ngAfterViewInit(): void {
     this.setupIntersectionObserver();
   }
 
@@ -2156,6 +2328,16 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
           this.totalPages = data.totalPages;
           this.hasMore = !data.last;
           this.loading = false;
+          
+          // Extract analysis date from first signal
+          if (data.content.length > 0 && data.content[0].analyzedAt) {
+            const date = new Date(data.content[0].analyzedAt);
+            this.analysisDate = date.toLocaleDateString('en-US', { 
+              month: 'short', 
+              day: 'numeric', 
+              year: 'numeric' 
+            });
+          }
         },
         error: (err) => {
           console.error('Error loading signals', err);
