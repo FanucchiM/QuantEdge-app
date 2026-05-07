@@ -494,7 +494,7 @@ export type SortDirection = 'asc' | 'desc' | null;
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 24px;
-      margin-bottom: 40px;
+      margin-bottom: 20px;
     }
 
     .stat-card {
@@ -638,7 +638,7 @@ export type SortDirection = 'asc' | 'desc' | null;
       display: flex;
       align-items: center;
       gap: 12px;
-      margin: 20px 0 12px;
+      margin: 20px 0 20px;
     }
 
     .search-row .search-bar {
