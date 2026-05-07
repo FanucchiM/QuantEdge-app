@@ -250,11 +250,6 @@ export type SortDirection = 'asc' | 'desc' | null;
               (input)="onSearchChange()">
             <button *ngIf="searchQuery" class="clear-search-btn" (click)="clearSearch()">×</button>
           </div>
-          <button class="filter-btn" title="Filters">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 3v18M3 9h18M3 15h18"/>
-            </svg>
-          </button>
         </div>
         <div *ngIf="searchError" class="search-error">
           <span>{{ searchError }}</span>
@@ -311,6 +306,11 @@ export type SortDirection = 'asc' | 'desc' | null;
                   </button>
                 </div>
               </div>
+              <button class="filter-btn" title="Filters">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 3v18M3 9h18M3 15h18"/>
+                </svg>
+              </button>
               <div class="sort-backdrop" *ngIf="sortMenuOpen" (click)="toggleSortMenu()"></div>
             </div>
           </div>
@@ -571,7 +571,7 @@ export type SortDirection = 'asc' | 'desc' | null;
     .table-section {
       background: var(--bg-card);
       border-radius: 24px;
-      padding: 32px;
+      padding: 20px;
       border: 1px solid var(--border);
     }
 
