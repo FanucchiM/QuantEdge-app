@@ -238,7 +238,29 @@ export type SortDirection = 'asc' | 'desc' | null;
         <section class="table-section">
           <div class="table-header">
             <div class="header-row">
-              <h2>Today's Signals</h2>
+              <div class="header-left">
+                <h2>Today's Signals</h2>
+                <span class="analysis-date" *ngIf="analysisDate">{{ analysisDate }}</span>
+              </div>
+              <div class="header-right">
+                <div class="search-bar">
+                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="M21 21l-4.35-4.35"></path>
+                  </svg>
+                  <input 
+                    type="text" 
+                    class="search-input" 
+                    placeholder="Search by name..."
+                    [(ngModel)]="searchQuery"
+                    (input)="onSearchChange()">
+                </div>
+                <button class="filter-btn" title="Filters">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 3v18M3 9h18M3 15h18"/>
+                  </svg>
+                </button>
+              </div>
               <div class="sort-dropdown">
                 <button class="sort-trigger" (click)="toggleSortMenu()" [class.active]="sortMenuOpen || sortConfigs.length > 0" title="Sort">
                   <svg class="sort-icon-svg" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2">
@@ -567,6 +589,93 @@ export type SortDirection = 'asc' | 'desc' | null;
       color: #fff;
       margin: 0;
       letter-spacing: -0.5px;
+    }
+
+    .header-left {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .header-left h2 {
+      font-size: 22px;
+      font-weight: 600;
+      color: #fff;
+      margin: 0;
+    }
+
+    .analysis-date {
+      font-size: 14px;
+      color: #9CA3AF;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+      background: #1F2937;
+      border-radius: 8px;
+      padding: 8px 12px;
+      gap: 8px;
+      width: 200px;
+    }
+
+    .search-bar .search-icon {
+      width: 18px;
+      height: 18px;
+      color: #9CA3AF;
+    }
+
+    .search-bar .search-input {
+      border: none;
+      background: transparent;
+      outline: none;
+      font-size: 14px;
+      color: #fff;
+      width: 100%;
+    }
+
+    .search-bar .search-input::placeholder {
+      color: #9CA3AF;
+    }
+
+    .filter-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      background: #1F2937;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .filter-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: #9CA3AF;
+    }
+
+    @media (max-width: 640px) {
+      .header-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .header-right {
+        width: 100%;
+      }
+
+      .search-bar {
+        flex: 1;
+      }
     }
 
     .sort-dropdown {
@@ -2000,6 +2109,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   sortMenuOpen = false;
   sortConfigs: SortConfig[] = [];
   
+  searchQuery = '';
+  analysisDate = '';
+  
   private currentPage = 0;
   private pageSize = 100;
   private totalPages = 1;
@@ -2011,8 +2123,18 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(private signalService: SignalService) {}
 
   get sortedSignals(): Signal[] {
+    let result = this.signals;
+    
+    // Filter by search query
+    if (this.searchQuery && this.searchQuery.trim()) {
+      const query = this.searchQuery.toLowerCase().trim();
+      result = result.filter(s => 
+        (s.companyName && s.companyName.toLowerCase().includes(query))
+      );
+    }
+    
     if (this.sortConfigs.length === 0 && (!this.sortColumn || !this.sortDirection)) {
-      return this.signals;
+      return result;
     }
     
     const configs = [...this.sortConfigs];
@@ -2107,6 +2229,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.sortMenuOpen = !this.sortMenuOpen;
   }
 
+  onSearchChange(): void {
+    // Search is instant - filtered in sortedSignals getter
+  }
+
   ngOnInit(): void {
     this.loadSignals();
   }
@@ -2156,6 +2282,14 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
           this.totalPages = data.totalPages;
           this.hasMore = !data.last;
           this.loading = false;
+          
+          // Get analysis date from first signal
+          if (data.content.length > 0 && data.content[0].analyzedAt) {
+            const date = new Date(data.content[0].analyzedAt);
+            this.analysisDate = date.toLocaleDateString('en-US', { 
+              month: 'short', day: 'numeric', year: 'numeric' 
+            });
+          }
         },
         error: (err) => {
           console.error('Error loading signals', err);
