@@ -287,7 +287,7 @@ export type SortDirection = 'asc' | 'desc' | null;
                     class="sort-option" 
                     [class.active]="isColumnSorted('signalType')"
                     (click)="sortBy('signalType')">
-<th>Signal</th>
+                    Signal
                     <span class="sort-icon" *ngIf="isColumnSorted('signalType')">
                       {{ isColumnSorted('signalType') === 'asc' ? '↑' : '↓' }}
                     </span>
@@ -296,7 +296,7 @@ export type SortDirection = 'asc' | 'desc' | null;
                     class="sort-option" 
                     [class.active]="isColumnSorted('market')"
                     (click)="sortBy('market')">
-<th>Market</th>
+                    Market
                     <span class="sort-icon" *ngIf="isColumnSorted('market')">
                       {{ isColumnSorted('market') === 'asc' ? '↑' : '↓' }}
                     </span>
