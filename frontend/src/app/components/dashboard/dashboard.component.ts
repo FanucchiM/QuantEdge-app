@@ -263,11 +263,6 @@ export type SortDirection = 'asc' | 'desc' | null;
                 <span class="analysis-date" *ngIf="analysisDate">{{ analysisDate }}</span>
               </div>
               <div class="header-controls">
-                <button class="filter-btn" title="Filters">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 3v18M3 9h18M3 15h18"/>
-                  </svg>
-                </button>
                 <div class="sort-dropdown">
                 <button class="sort-trigger" (click)="toggleSortMenu()" [class.active]="sortMenuOpen || sortConfigs.length > 0" title="Sort">
                   <svg class="sort-icon-svg" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2">
@@ -314,7 +309,12 @@ export type SortDirection = 'asc' | 'desc' | null;
               </div>
               <button class="filter-btn" title="Filters">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M12 3v18M3 9h18M3 15h18"/>
+                  <line x1="4" y1="6" x2="20" y2="6"/>
+                  <line x1="4" y1="12" x2="20" y2="12"/>
+                  <line x1="4" y1="18" x2="20" y2="18"/>
+                  <circle cx="8" cy="6" r="2" fill="currentColor"/>
+                  <circle cx="16" cy="12" r="2" fill="currentColor"/>
+                  <circle cx="10" cy="18" r="2" fill="currentColor"/>
                 </svg>
               </button>
               <div class="sort-backdrop" *ngIf="sortMenuOpen" (click)="toggleSortMenu()"></div>
