@@ -262,7 +262,13 @@ export type SortDirection = 'asc' | 'desc' | null;
                 <h2>Today's Signals</h2>
                 <span class="analysis-date" *ngIf="analysisDate">{{ analysisDate }}</span>
               </div>
-              <div class="sort-dropdown">
+              <div class="header-controls">
+                <button class="filter-btn" title="Filters">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 3v18M3 9h18M3 15h18"/>
+                  </svg>
+                </button>
+                <div class="sort-dropdown">
                 <button class="sort-trigger" (click)="toggleSortMenu()" [class.active]="sortMenuOpen || sortConfigs.length > 0" title="Sort">
                   <svg class="sort-icon-svg" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2">
                     <path d="M3 6h18M7 12h10M12 18h2"/>
@@ -312,6 +318,7 @@ export type SortDirection = 'asc' | 'desc' | null;
                 </svg>
               </button>
               <div class="sort-backdrop" *ngIf="sortMenuOpen" (click)="toggleSortMenu()"></div>
+              </div>
             </div>
           </div>
           
@@ -613,6 +620,12 @@ export type SortDirection = 'asc' | 'desc' | null;
     .analysis-date {
       font-size: 14px;
       color: #9CA3AF;
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .header-right {
