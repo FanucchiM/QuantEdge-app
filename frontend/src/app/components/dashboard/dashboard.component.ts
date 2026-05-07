@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, HostListener, ElementRef, ViewChild, AfterViewInit, DestroyRef, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, ElementRef, ViewChild, DestroyRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -455,8 +455,6 @@ export type SortDirection = 'asc' | 'desc' | null;
             <div class="spinner"></div>
             <p>Loading signals...</p>
           </div>
-
-          <div #scrollSentinel class="scroll-sentinel"></div>
 
           <div *ngIf="error" class="error-state">
             <div class="error-icon">⚠️</div>
@@ -2377,7 +2375,7 @@ export type SortDirection = 'asc' | 'desc' | null;
     }
     `]
 })
-export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
+export class DashboardComponent implements OnInit, OnDestroy {
   @ViewChild('scrollSentinel') scrollSentinel!: ElementRef;
   
   @ViewChild('seasonalityChart') seasonalityChartRef!: ElementRef;
@@ -2388,7 +2386,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   selectedSignal: Signal | null = null;
   stockHistory: StockHistory | null = null;
   loading = false;
-  loadingMore = false;
   loadingHistory = false;
   loadingSeasonality = false;
   historyError: string | null = null;
@@ -2424,13 +2421,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   searchError = '';
   analysisDate = '';
   
-  private currentPage = 0;
-  private pageSize = 100;
-  private totalPages = 1;
-  private hasMore = true;
-  private observer: IntersectionObserver | null = null;
   private destroyRef = inject(DestroyRef);
-  
 
   constructor(private signalService: SignalService) {}
 
@@ -2629,28 +2620,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.loadSignals();
   }
 
-  ngAfterViewInit(): void {
-    this.setupIntersectionObserver();
-  }
-
   ngOnDestroy(): void {
-    this.observer?.disconnect();
     document.body.style.overflow = '';
-  }
-
-  private setupIntersectionObserver(): void {
-    this.observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && !this.loadingMore && this.hasMore) {
-          this.loadMoreSignals();
-        }
-      },
-      { threshold: 0.1 }
-    );
-    
-    if (this.scrollSentinel?.nativeElement) {
-      this.observer.observe(this.scrollSentinel.nativeElement);
-    }
   }
 
   @HostListener('document:keydown.escape')
@@ -2663,7 +2634,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   loadSignals(): void {
     this.loading = true;
     this.error = null;
-    this.currentPage = 0;
     
     this.signalService.getTodaySignals()
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -2673,11 +2643,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
           this.signals = allSignals;
           this.filteredSignals = allSignals;
           this.totalSignals = allSignals.length;
-          this.hasMore = false;
           this.loading = false;
           this.updateCounts(allSignals);
           
-          // Get analysis date from first signal
           if (allSignals.length > 0 && allSignals[0].analyzedAt) {
             const date = new Date(allSignals[0].analyzedAt);
             this.analysisDate = date.toLocaleDateString('en-US', { 
@@ -2698,28 +2666,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.buyCount = data.filter(s => s.signalType === 'BUY').length;
     this.sellCount = data.filter(s => s.signalType === 'SELL').length;
     this.holdCount = data.filter(s => s.signalType === 'HOLD').length;
-  }
-
-  loadMoreSignals(): void {
-    if (this.loadingMore || !this.hasMore) return;
-    
-    this.loadingMore = true;
-    this.currentPage++;
-    
-    this.signalService.getSignals(this.currentPage, this.pageSize)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (data) => {
-          this.signals = [...this.signals, ...data.content];
-          this.hasMore = !data.last;
-          this.loadingMore = false;
-        },
-        error: (err) => {
-          console.error('Error loading more signals', err);
-          this.currentPage--;
-          this.loadingMore = false;
-        }
-      });
   }
 
   openModal(signal: Signal): void {
