@@ -368,11 +368,6 @@ export type SortDirection = 'asc' | 'desc' | null;
 
           <div #scrollSentinel class="scroll-sentinel"></div>
 
-          <div *ngIf="loadingMore" class="loading-more">
-            <div class="spinner-small"></div>
-            <span>Loading more...</span>
-          </div>
-
           <div *ngIf="error" class="error-state">
             <div class="error-icon">⚠️</div>
             <h3>Error</h3>
