@@ -800,7 +800,11 @@ export type SortDirection = 'asc' | 'desc' | null;
         flex: 1;
       }
 
-      .filter-menu {
+      .filter-dropdown {
+        position: static;
+      }
+
+      .filter-dropdown .filter-menu {
         position: fixed;
         top: auto;
         bottom: 0;
@@ -812,6 +816,8 @@ export type SortDirection = 'asc' | 'desc' | null;
         max-height: 60vh;
         overflow-y: auto;
         padding: 16px;
+        display: block;
+        z-index: 100;
       }
 
       .filter-section {
