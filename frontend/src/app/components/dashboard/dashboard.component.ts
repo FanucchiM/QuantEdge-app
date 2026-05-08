@@ -163,6 +163,9 @@ export type SortDirection = 'asc' | 'desc' | null;
                     {{ getTrendIcon(signal.trend) }} {{ signal.trend }}
                   </span>
 </div>
+              </div>
+              <div class="menu-backdrop" *ngIf="sortMenuOpen || filterMenuOpen" (click)="closeMenus()"></div>
+            </div>
           </div>
         </div>
       </div>
