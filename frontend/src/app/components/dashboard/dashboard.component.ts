@@ -817,7 +817,7 @@ export type SortDirection = 'asc' | 'desc' | null;
         overflow-y: auto;
         padding: 16px;
         display: block;
-        z-index: 100;
+        z-index: 200;
       }
 
       .filter-section {
@@ -1143,7 +1143,8 @@ export type SortDirection = 'asc' | 'desc' | null;
       left: 0;
       right: 0;
       bottom: 0;
-      z-index: 50;
+      z-index: 199;
+      background: rgba(0, 0, 0, 0.5);
     }
 
     .clear-sort {
