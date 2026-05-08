@@ -1146,7 +1146,13 @@ export type SortDirection = 'asc' | 'desc' | null;
       right: 0;
       bottom: 0;
       z-index: 150;
-      background: rgba(0, 0, 0, 0.5);
+      background: transparent;
+    }
+
+    @media (max-width: 640px) {
+      .menu-backdrop {
+        background: rgba(0, 0, 0, 0.5);
+      }
     }
 
     /* Filter menu global — fuera del stacking context */
