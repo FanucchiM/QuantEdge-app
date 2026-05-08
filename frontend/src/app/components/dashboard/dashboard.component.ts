@@ -266,8 +266,13 @@ export type SortDirection = 'asc' | 'desc' | null;
               <div class="header-controls">
                 <div class="sort-dropdown">
                 <button class="sort-trigger" (click)="toggleSortMenu()" [class.active]="sortMenuOpen || sortConfigs.length > 0" title="Sort">
-                  <svg class="sort-icon-svg" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2">
-                    <path d="M3 6h18M7 12h10M12 18h2"/>
+                  <svg class="sort-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="4" y1="6" x2="20" y2="6"/>
+                    <line x1="4" y1="12" x2="20" y2="12"/>
+                    <line x1="4" y1="18" x2="20" y2="18"/>
+                    <circle cx="8" cy="6" r="2" fill="currentColor"/>
+                    <circle cx="16" cy="12" r="2" fill="currentColor"/>
+                    <circle cx="10" cy="18" r="2" fill="currentColor"/>
                   </svg>
                   <span class="sort-count" *ngIf="sortConfigs.length > 1">{{ sortConfigs.length }}</span>
                   <svg class="chevron" [class.open]="sortMenuOpen" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2">
