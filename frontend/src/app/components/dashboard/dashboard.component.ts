@@ -163,8 +163,6 @@ export type SortDirection = 'asc' | 'desc' | null;
                     {{ getTrendIcon(signal.trend) }} {{ signal.trend }}
                   </span>
 </div>
-              </div>
-              <div class="menu-backdrop" *ngIf="sortMenuOpen || filterMenuOpen" (click)="closeMenus()"></div>
             </div>
           </div>
         </div>
@@ -320,7 +318,60 @@ export type SortDirection = 'asc' | 'desc' | null;
                   </svg>
                   <span class="filter-count" *ngIf="getActiveFilterCount() > 0">{{ getActiveFilterCount() }}</span>
                 </button>
-
+                <div class="filter-menu" *ngIf="filterMenuOpen">
+                  <div class="filter-section">
+                    <div class="filter-section-title">Signal Type</div>
+                    <label class="filter-option">
+                      <input type="checkbox" [checked]="isFilterValue('signalType', 'BUY')" (change)="toggleFilterValue('signalType', 'BUY')">
+                      <span class="filter-label buy">BUY</span>
+                    </label>
+                    <label class="filter-option">
+                      <input type="checkbox" [checked]="isFilterValue('signalType', 'SELL')" (change)="toggleFilterValue('signalType', 'SELL')">
+                      <span class="filter-label sell">SELL</span>
+                    </label>
+                    <label class="filter-option">
+                      <input type="checkbox" [checked]="isFilterValue('signalType', 'HOLD')" (change)="toggleFilterValue('signalType', 'HOLD')">
+                      <span class="filter-label hold">HOLD</span>
+                    </label>
+                  </div>
+                  <div class="filter-section">
+                    <div class="filter-section-title">Market</div>
+                    <label class="filter-option">
+                      <input type="checkbox" [checked]="isFilterValue('market', 'US')" (change)="toggleFilterValue('market', 'US')">
+                      <span class="filter-label">US</span>
+                    </label>
+                    <label class="filter-option">
+                      <input type="checkbox" [checked]="isFilterValue('market', 'AR')" (change)="toggleFilterValue('market', 'AR')">
+                      <span class="filter-label">AR</span>
+                    </label>
+                    <label class="filter-option">
+                      <input type="checkbox" [checked]="isFilterValue('market', 'EU')" (change)="toggleFilterValue('market', 'EU')">
+                      <span class="filter-label">EU</span>
+                    </label>
+                    <label class="filter-option">
+                      <input type="checkbox" [checked]="isFilterValue('market', 'JP')" (change)="toggleFilterValue('market', 'JP')">
+                      <span class="filter-label">JP</span>
+                    </label>
+                  </div>
+                  <div class="filter-section">
+                    <div class="filter-section-title">Trend</div>
+                    <label class="filter-option">
+                      <input type="checkbox" [checked]="isFilterValue('trend', 'ALCISTA')" (change)="toggleFilterValue('trend', 'ALCISTA')">
+                      <span class="filter-label bullish">BULLISH</span>
+                    </label>
+                    <label class="filter-option">
+                      <input type="checkbox" [checked]="isFilterValue('trend', 'BAJISTA')" (change)="toggleFilterValue('trend', 'BAJISTA')">
+                      <span class="filter-label bearish">BEARISH</span>
+                    </label>
+                    <label class="filter-option">
+                      <input type="checkbox" [checked]="isFilterValue('trend', 'LATERAL')" (change)="toggleFilterValue('trend', 'LATERAL')">
+                      <span class="filter-label lateral">LATERAL</span>
+                    </label>
+                  </div>
+                  <button *ngIf="hasActiveFilters()" class="clear-filters" (click)="clearFilters()">
+                    Clear all
+                  </button>
+                </div>
               </div>
               </div>
             </div>
@@ -424,62 +475,8 @@ export type SortDirection = 'asc' | 'desc' | null;
         </div>
       </main>
 
-      <!-- Backdrop y filter-menu fuera de cualquier stacking context -->
+      <!-- Backdrop outside main for z-index -->
       <div class="menu-backdrop" *ngIf="sortMenuOpen || filterMenuOpen" (click)="closeMenus()"></div>
-      <div class="filter-menu-global" *ngIf="filterMenuOpen" (click)="$event.stopPropagation()" [style.top.px]="filterMenuTop" [style.right.px]="filterMenuRight">
-        <div class="filter-section">
-          <div class="filter-section-title">Signal Type</div>
-          <label class="filter-option">
-            <input type="checkbox" [checked]="isFilterValue('signalType', 'BUY')" (change)="toggleFilterValue('signalType', 'BUY')">
-            <span class="filter-label buy">BUY</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" [checked]="isFilterValue('signalType', 'SELL')" (change)="toggleFilterValue('signalType', 'SELL')">
-            <span class="filter-label sell">SELL</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" [checked]="isFilterValue('signalType', 'HOLD')" (change)="toggleFilterValue('signalType', 'HOLD')">
-            <span class="filter-label hold">HOLD</span>
-          </label>
-        </div>
-        <div class="filter-section">
-          <div class="filter-section-title">Market</div>
-          <label class="filter-option">
-            <input type="checkbox" [checked]="isFilterValue('market', 'US')" (change)="toggleFilterValue('market', 'US')">
-            <span class="filter-label">US</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" [checked]="isFilterValue('market', 'AR')" (change)="toggleFilterValue('market', 'AR')">
-            <span class="filter-label">AR</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" [checked]="isFilterValue('market', 'EU')" (change)="toggleFilterValue('market', 'EU')">
-            <span class="filter-label">EU</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" [checked]="isFilterValue('market', 'JP')" (change)="toggleFilterValue('market', 'JP')">
-            <span class="filter-label">JP</span>
-          </label>
-        </div>
-        <div class="filter-section">
-          <div class="filter-section-title">Trend</div>
-          <label class="filter-option">
-            <input type="checkbox" [checked]="isFilterValue('trend', 'ALCISTA')" (change)="toggleFilterValue('trend', 'ALCISTA')">
-            <span class="filter-label bullish">BULLISH</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" [checked]="isFilterValue('trend', 'BAJISTA')" (change)="toggleFilterValue('trend', 'BAJISTA')">
-            <span class="filter-label bearish">BEARISH</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" [checked]="isFilterValue('trend', 'LATERAL')" (change)="toggleFilterValue('trend', 'LATERAL')">
-            <span class="filter-label lateral">LATERAL</span>
-          </label>
-        </div>
-        <button *ngIf="hasActiveFilters()" class="clear-filters" (click)="clearFilters()">
-          Clear all
-        </button>
-      </div>
     </div>
   `,
   styles: [`
@@ -2466,6 +2463,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     { type: 'trend', values: [] }
   ];
   
+  isMobile = false;
+  
   searchQuery = '';
   searchError = '';
   analysisDate = '';
@@ -2679,7 +2678,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.checkMobile();
     this.loadSignals();
+  }
+
+  checkMobile(): void {
+    this.isMobile = window.innerWidth <= 640;
   }
 
   ngOnDestroy(): void {
