@@ -1,14 +1,14 @@
-import { Component, OnInit, OnDestroy, HostListener, ElementRef, ViewChild, DestroyRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, DestroyRef, ElementRef, HostListener, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatIconModule } from '@angular/material/icon';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { SignalService } from '../../services/signal.service';
-import { Signal, PageResponse, StockHistory } from '../../models/stock.model';
 import { Chart, registerables } from 'chart.js';
+import { Signal, StockHistory } from '../../models/stock.model';
+import { SignalService } from '../../services/signal.service';
 
 Chart.register(...registerables);
 
@@ -163,9 +163,6 @@ export type SortDirection = 'asc' | 'desc' | null;
                     {{ getTrendIcon(signal.trend) }} {{ signal.trend }}
                   </span>
 </div>
-              </div>
-              <div class="menu-backdrop" *ngIf="sortMenuOpen || filterMenuOpen" (click)="closeMenus()"></div>
-            </div>
           </div>
         </div>
       </div>
