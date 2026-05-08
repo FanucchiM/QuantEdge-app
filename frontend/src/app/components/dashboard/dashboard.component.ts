@@ -309,7 +309,7 @@ export type SortDirection = 'asc' | 'desc' | null;
                 </div>
               </div>
               <div class="filter-dropdown">
-                <button class="filter-btn" (click)="toggleFilterMenu()" [class.active]="filterMenuOpen || hasActiveFilters()" title="Filters">
+                <button class="filter-btn" #filterBtn (click)="toggleFilterMenu()" [class.active]="filterMenuOpen || hasActiveFilters()" title="Filters">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="4" y1="6" x2="20" y2="6"/>
                     <line x1="4" y1="12" x2="20" y2="12"/>
@@ -320,60 +320,7 @@ export type SortDirection = 'asc' | 'desc' | null;
                   </svg>
                   <span class="filter-count" *ngIf="getActiveFilterCount() > 0">{{ getActiveFilterCount() }}</span>
                 </button>
-                <div class="filter-menu" *ngIf="filterMenuOpen">
-                  <div class="filter-section">
-                    <div class="filter-section-title">Signal Type</div>
-                    <label class="filter-option">
-                      <input type="checkbox" [checked]="isFilterValue('signalType', 'BUY')" (change)="toggleFilterValue('signalType', 'BUY')">
-                      <span class="filter-label buy">BUY</span>
-                    </label>
-                    <label class="filter-option">
-                      <input type="checkbox" [checked]="isFilterValue('signalType', 'SELL')" (change)="toggleFilterValue('signalType', 'SELL')">
-                      <span class="filter-label sell">SELL</span>
-                    </label>
-                    <label class="filter-option">
-                      <input type="checkbox" [checked]="isFilterValue('signalType', 'HOLD')" (change)="toggleFilterValue('signalType', 'HOLD')">
-                      <span class="filter-label hold">HOLD</span>
-                    </label>
-                  </div>
-                  <div class="filter-section">
-                    <div class="filter-section-title">Market</div>
-                    <label class="filter-option">
-                      <input type="checkbox" [checked]="isFilterValue('market', 'US')" (change)="toggleFilterValue('market', 'US')">
-                      <span class="filter-label">US</span>
-                    </label>
-                    <label class="filter-option">
-                      <input type="checkbox" [checked]="isFilterValue('market', 'AR')" (change)="toggleFilterValue('market', 'AR')">
-                      <span class="filter-label">AR</span>
-                    </label>
-                    <label class="filter-option">
-                      <input type="checkbox" [checked]="isFilterValue('market', 'EU')" (change)="toggleFilterValue('market', 'EU')">
-                      <span class="filter-label">EU</span>
-                    </label>
-                    <label class="filter-option">
-                      <input type="checkbox" [checked]="isFilterValue('market', 'JP')" (change)="toggleFilterValue('market', 'JP')">
-                      <span class="filter-label">JP</span>
-                    </label>
-                  </div>
-                  <div class="filter-section">
-                    <div class="filter-section-title">Trend</div>
-                    <label class="filter-option">
-                      <input type="checkbox" [checked]="isFilterValue('trend', 'ALCISTA')" (change)="toggleFilterValue('trend', 'ALCISTA')">
-                      <span class="filter-label bullish">BULLISH</span>
-                    </label>
-                    <label class="filter-option">
-                      <input type="checkbox" [checked]="isFilterValue('trend', 'BAJISTA')" (change)="toggleFilterValue('trend', 'BAJISTA')">
-                      <span class="filter-label bearish">BEARISH</span>
-                    </label>
-                    <label class="filter-option">
-                      <input type="checkbox" [checked]="isFilterValue('trend', 'LATERAL')" (change)="toggleFilterValue('trend', 'LATERAL')">
-                      <span class="filter-label lateral">LATERAL</span>
-                    </label>
-                  </div>
-                  <button *ngIf="hasActiveFilters()" class="clear-filters" (click)="clearFilters()">
-                    Clear all
-                  </button>
-                </div>
+
               </div>
               </div>
             </div>
@@ -476,6 +423,63 @@ export type SortDirection = 'asc' | 'desc' | null;
           ⚠ Technical analysis only · Not financial advice · DYOR
         </div>
       </main>
+
+      <!-- Backdrop y filter-menu fuera de cualquier stacking context -->
+      <div class="menu-backdrop" *ngIf="sortMenuOpen || filterMenuOpen" (click)="closeMenus()"></div>
+      <div class="filter-menu-global" *ngIf="filterMenuOpen" (click)="$event.stopPropagation()" [style.top.px]="filterMenuTop" [style.right.px]="filterMenuRight">
+        <div class="filter-section">
+          <div class="filter-section-title">Signal Type</div>
+          <label class="filter-option">
+            <input type="checkbox" [checked]="isFilterValue('signalType', 'BUY')" (change)="toggleFilterValue('signalType', 'BUY')">
+            <span class="filter-label buy">BUY</span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" [checked]="isFilterValue('signalType', 'SELL')" (change)="toggleFilterValue('signalType', 'SELL')">
+            <span class="filter-label sell">SELL</span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" [checked]="isFilterValue('signalType', 'HOLD')" (change)="toggleFilterValue('signalType', 'HOLD')">
+            <span class="filter-label hold">HOLD</span>
+          </label>
+        </div>
+        <div class="filter-section">
+          <div class="filter-section-title">Market</div>
+          <label class="filter-option">
+            <input type="checkbox" [checked]="isFilterValue('market', 'US')" (change)="toggleFilterValue('market', 'US')">
+            <span class="filter-label">US</span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" [checked]="isFilterValue('market', 'AR')" (change)="toggleFilterValue('market', 'AR')">
+            <span class="filter-label">AR</span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" [checked]="isFilterValue('market', 'EU')" (change)="toggleFilterValue('market', 'EU')">
+            <span class="filter-label">EU</span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" [checked]="isFilterValue('market', 'JP')" (change)="toggleFilterValue('market', 'JP')">
+            <span class="filter-label">JP</span>
+          </label>
+        </div>
+        <div class="filter-section">
+          <div class="filter-section-title">Trend</div>
+          <label class="filter-option">
+            <input type="checkbox" [checked]="isFilterValue('trend', 'ALCISTA')" (change)="toggleFilterValue('trend', 'ALCISTA')">
+            <span class="filter-label bullish">BULLISH</span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" [checked]="isFilterValue('trend', 'BAJISTA')" (change)="toggleFilterValue('trend', 'BAJISTA')">
+            <span class="filter-label bearish">BEARISH</span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" [checked]="isFilterValue('trend', 'LATERAL')" (change)="toggleFilterValue('trend', 'LATERAL')">
+            <span class="filter-label lateral">LATERAL</span>
+          </label>
+        </div>
+        <button *ngIf="hasActiveFilters()" class="clear-filters" (click)="clearFilters()">
+          Clear all
+        </button>
+      </div>
     </div>
   `,
   styles: [`
@@ -1145,6 +1149,34 @@ export type SortDirection = 'asc' | 'desc' | null;
       bottom: 0;
       z-index: 199;
       background: rgba(0, 0, 0, 0.5);
+    }
+
+    /* Filter menu global — fuera del stacking context */
+    .filter-menu-global {
+      position: fixed;
+      right: 16px;
+      width: 200px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 8px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      z-index: 200;
+      animation: fadeIn 0.2s ease;
+    }
+
+    @media (max-width: 640px) {
+      .filter-menu-global {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        border-radius: 16px 16px 0 0;
+        max-height: 60vh;
+        overflow-y: auto;
+        padding: 16px;
+      }
     }
 
     .clear-sort {
@@ -2392,6 +2424,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   @ViewChild('scrollSentinel') scrollSentinel!: ElementRef;
   
   @ViewChild('seasonalityChart') seasonalityChartRef!: ElementRef;
+  @ViewChild('filterBtn') filterBtnRef!: ElementRef;
+  filterMenuTop = 0;
+  filterMenuRight = 0;
   
   signals: Signal[] = [];
   filteredSignals: Signal[] = [];
@@ -2549,6 +2584,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   toggleFilterMenu(): void {
     this.filterMenuOpen = !this.filterMenuOpen;
     this.sortMenuOpen = false;
+    if (this.filterMenuOpen && this.filterBtnRef) {
+      const rect = this.filterBtnRef.nativeElement.getBoundingClientRect();
+      this.filterMenuTop = rect.bottom + 8;
+      this.filterMenuRight = window.innerWidth - rect.right;
+    }
   }
 
   closeMenus(): void {
