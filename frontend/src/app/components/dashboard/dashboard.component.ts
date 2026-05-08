@@ -474,9 +474,6 @@ export type SortDirection = 'asc' | 'desc' | null;
           ⚠ Technical analysis only · Not financial advice · DYOR
         </div>
       </main>
-
-      <!-- Backdrop outside main for z-index -->
-      <div class="menu-backdrop" *ngIf="sortMenuOpen || filterMenuOpen" (click)="closeMenus()"></div>
     </div>
   `,
   styles: [`
@@ -1140,17 +1137,18 @@ export type SortDirection = 'asc' | 'desc' | null;
     }
 
 .menu-backdrop {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      z-index: 150;
-      background: transparent;
+      display: none;
     }
 
     @media (max-width: 640px) {
       .menu-backdrop {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 150;
         background: rgba(0, 0, 0, 0.5);
       }
     }
