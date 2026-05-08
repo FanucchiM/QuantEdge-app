@@ -164,7 +164,7 @@ export type SortDirection = 'asc' | 'desc' | null;
                   </span>
 </div>
               </div>
-              <div class="menu-backdrop" *ngIf="sortMenuOpen || filterMenuOpen" (click)="closeMenus()"></div>
+              <div class="menu-backdrop" *ngIf="sortMenuOpen" (click)="closeMenus()"></div>
             </div>
           </div>
         </div>
@@ -266,13 +266,8 @@ export type SortDirection = 'asc' | 'desc' | null;
               <div class="header-controls">
                 <div class="sort-dropdown">
                 <button class="sort-trigger" (click)="toggleSortMenu()" [class.active]="sortMenuOpen || sortConfigs.length > 0" title="Sort">
-                  <svg class="sort-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="4" y1="6" x2="20" y2="6"/>
-                    <line x1="4" y1="12" x2="20" y2="12"/>
-                    <line x1="4" y1="18" x2="20" y2="18"/>
-                    <circle cx="8" cy="6" r="2" fill="currentColor"/>
-                    <circle cx="16" cy="12" r="2" fill="currentColor"/>
-                    <circle cx="10" cy="18" r="2" fill="currentColor"/>
+                  <svg class="sort-icon-svg" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2">
+                    <path d="M3 6h18M7 12h10M12 18h2"/>
                   </svg>
                   <span class="sort-count" *ngIf="sortConfigs.length > 1">{{ sortConfigs.length }}</span>
                   <svg class="chevron" [class.open]="sortMenuOpen" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2">
@@ -312,21 +307,7 @@ export type SortDirection = 'asc' | 'desc' | null;
                     Clear all
                   </button>
                 </div>
-              </div>
-              <div class="filter-dropdown">
-                <button class="filter-btn" #filterBtn (click)="toggleFilterMenu()" [class.active]="filterMenuOpen || hasActiveFilters()" title="Filters">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="4" y1="6" x2="20" y2="6"/>
-                    <line x1="4" y1="12" x2="20" y2="12"/>
-                    <line x1="4" y1="18" x2="20" y2="18"/>
-                    <circle cx="8" cy="6" r="2" fill="currentColor"/>
-                    <circle cx="16" cy="12" r="2" fill="currentColor"/>
-                    <circle cx="10" cy="18" r="2" fill="currentColor"/>
-                  </svg>
-                  <span class="filter-count" *ngIf="getActiveFilterCount() > 0">{{ getActiveFilterCount() }}</span>
-                </button>
-
-              </div>
+</div>
               </div>
             </div>
           </div>
@@ -430,61 +411,7 @@ export type SortDirection = 'asc' | 'desc' | null;
       </main>
 
       <!-- Backdrop y filter-menu fuera de cualquier stacking context -->
-      <div class="menu-backdrop" *ngIf="sortMenuOpen || filterMenuOpen" (click)="closeMenus()"></div>
-      <div class="filter-menu-global" *ngIf="filterMenuOpen" (click)="$event.stopPropagation()" [style.top.px]="filterMenuTop" [style.right.px]="filterMenuRight">
-        <div class="filter-section">
-          <div class="filter-section-title">Signal Type</div>
-          <label class="filter-option">
-            <input type="checkbox" [checked]="isFilterValue('signalType', 'BUY')" (change)="toggleFilterValue('signalType', 'BUY')">
-            <span class="filter-label buy">BUY</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" [checked]="isFilterValue('signalType', 'SELL')" (change)="toggleFilterValue('signalType', 'SELL')">
-            <span class="filter-label sell">SELL</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" [checked]="isFilterValue('signalType', 'HOLD')" (change)="toggleFilterValue('signalType', 'HOLD')">
-            <span class="filter-label hold">HOLD</span>
-          </label>
-        </div>
-        <div class="filter-section">
-          <div class="filter-section-title">Market</div>
-          <label class="filter-option">
-            <input type="checkbox" [checked]="isFilterValue('market', 'US')" (change)="toggleFilterValue('market', 'US')">
-            <span class="filter-label">US</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" [checked]="isFilterValue('market', 'AR')" (change)="toggleFilterValue('market', 'AR')">
-            <span class="filter-label">AR</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" [checked]="isFilterValue('market', 'EU')" (change)="toggleFilterValue('market', 'EU')">
-            <span class="filter-label">EU</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" [checked]="isFilterValue('market', 'JP')" (change)="toggleFilterValue('market', 'JP')">
-            <span class="filter-label">JP</span>
-          </label>
-        </div>
-        <div class="filter-section">
-          <div class="filter-section-title">Trend</div>
-          <label class="filter-option">
-            <input type="checkbox" [checked]="isFilterValue('trend', 'ALCISTA')" (change)="toggleFilterValue('trend', 'ALCISTA')">
-            <span class="filter-label bullish">BULLISH</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" [checked]="isFilterValue('trend', 'BAJISTA')" (change)="toggleFilterValue('trend', 'BAJISTA')">
-            <span class="filter-label bearish">BEARISH</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" [checked]="isFilterValue('trend', 'LATERAL')" (change)="toggleFilterValue('trend', 'LATERAL')">
-            <span class="filter-label lateral">LATERAL</span>
-          </label>
-        </div>
-        <button *ngIf="hasActiveFilters()" class="clear-filters" (click)="clearFilters()">
-          Clear all
-        </button>
-      </div>
+      <div class="menu-backdrop" *ngIf="sortMenuOpen" (click)="closeMenus()"></div>
     </div>
   `,
   styles: [`
@@ -2436,9 +2363,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   @ViewChild('scrollSentinel') scrollSentinel!: ElementRef;
   
   @ViewChild('seasonalityChart') seasonalityChartRef!: ElementRef;
-  @ViewChild('filterBtn') filterBtnRef!: ElementRef;
-  filterMenuTop = 0;
-  filterMenuRight = 0;
   
   signals: Signal[] = [];
   filteredSignals: Signal[] = [];
@@ -2469,13 +2393,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   sortDirection: SortDirection = null;
   sortMenuOpen = false;
   sortConfigs: SortConfig[] = [];
-  
-  filterMenuOpen = false;
-  filterConfigs: { type: string; values: string[] }[] = [
-    { type: 'signalType', values: [] },
-    { type: 'market', values: [] },
-    { type: 'trend', values: [] }
-  ];
   
   searchQuery = '';
   searchError = '';
@@ -2590,103 +2507,37 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   toggleSortMenu(): void {
     this.sortMenuOpen = !this.sortMenuOpen;
-    this.filterMenuOpen = false;
-  }
-
-  toggleFilterMenu(): void {
-    this.filterMenuOpen = !this.filterMenuOpen;
-    this.sortMenuOpen = false;
-    if (this.filterMenuOpen && this.filterBtnRef) {
-      const rect = this.filterBtnRef.nativeElement.getBoundingClientRect();
-      this.filterMenuTop = rect.bottom + 8;
-      this.filterMenuRight = window.innerWidth - rect.right;
-    }
   }
 
   closeMenus(): void {
     this.sortMenuOpen = false;
-    this.filterMenuOpen = false;
-  }
-
-  isFilterValue(type: string, value: string): boolean {
-    const config = this.filterConfigs.find(f => f.type === type);
-    return config ? config.values.includes(value) : false;
-  }
-
-  toggleFilterValue(type: string, value: string): void {
-    const config = this.filterConfigs.find(f => f.type === type);
-    if (!config) return;
-    
-    const index = config.values.indexOf(value);
-    if (index === -1) {
-      config.values.push(value);
-    } else {
-      config.values.splice(index, 1);
-    }
-    this.applyFilters();
-  }
-
-  hasActiveFilters(): boolean {
-    return this.filterConfigs.some(f => f.values.length > 0);
-  }
-
-  getActiveFilterCount(): number {
-    return this.filterConfigs.reduce((sum, f) => sum + f.values.length, 0);
-  }
-
-  clearFilters(): void {
-    this.filterConfigs.forEach(f => f.values = []);
-    this.applyFilters();
-  }
-
-  applyFilters(): void {
-    let result = [...this.allSignals];
-    
-    const signalTypes = this.filterConfigs.find(f => f.type === 'signalType')?.values || [];
-    if (signalTypes.length > 0) {
-      result = result.filter(s => signalTypes.includes(s.signalType));
-    }
-    
-    const markets = this.filterConfigs.find(f => f.type === 'market')?.values || [];
-    if (markets.length > 0) {
-      result = result.filter(s => markets.includes(s.market));
-    }
-    
-    const trends = this.filterConfigs.find(f => f.type === 'trend')?.values || [];
-    if (trends.length > 0) {
-      result = result.filter(s => trends.includes(s.trend));
-    }
-    
-    // Apply search query
-    if (this.searchQuery && this.searchQuery.trim()) {
-      const query = this.searchQuery.toLowerCase().trim();
-      result = result.filter(s => 
-        (s.companyName && s.companyName.toLowerCase().includes(query))
-      );
-      
-      if (result.length === 0) {
-        this.searchError = 'No results found. Try a different name.';
-      } else {
-        this.searchError = '';
-      }
-    } else {
-      this.searchError = '';
-    }
-    
-    this.filteredSignals = result;
-    this.signals = result;
-    this.updateCounts();
   }
 
   onSearchChange(): void {
     this.searchError = '';
-    this.applyFilters();
+    if (this.searchQuery && this.searchQuery.trim()) {
+      const query = this.searchQuery.toLowerCase().trim();
+      const result = this.allSignals.filter(s => 
+        (s.companyName && s.companyName.toLowerCase().includes(query))
+      );
+      if (result.length === 0) {
+        this.searchError = 'No results found. Try a different name.';
+      } else {
+        this.signals = result;
+        this.updateCounts();
+      }
+    } else {
+      this.searchError = '';
+      this.signals = [...this.allSignals];
+      this.updateCounts();
+    }
   }
 
   clearSearch(): void {
     this.searchQuery = '';
     this.searchError = '';
-    this.applyFilters();
+    this.signals = [...this.allSignals];
+    this.updateCounts();
   }
 
   ngOnInit(): void {
