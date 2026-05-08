@@ -917,6 +917,7 @@ export type SortDirection = 'asc' | 'desc' | null;
       min-width: 160px;
       max-width: 90vw;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      z-index: 200;
       z-index: 100;
       animation: fadeIn 0.2s ease;
     }
@@ -1147,7 +1148,7 @@ export type SortDirection = 'asc' | 'desc' | null;
       left: 0;
       right: 0;
       bottom: 0;
-      z-index: 199;
+      z-index: 150;
       background: rgba(0, 0, 0, 0.5);
     }
 
