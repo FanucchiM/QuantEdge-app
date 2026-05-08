@@ -1,14 +1,14 @@
+import { Component, OnInit, OnDestroy, HostListener, ElementRef, ViewChild, DestroyRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, ElementRef, HostListener, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { Chart, registerables } from 'chart.js';
-import { Signal, StockHistory } from '../../models/stock.model';
+import { MatIconModule } from '@angular/material/icon';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SignalService } from '../../services/signal.service';
+import { Signal, PageResponse, StockHistory } from '../../models/stock.model';
+import { Chart, registerables } from 'chart.js';
 
 Chart.register(...registerables);
 
