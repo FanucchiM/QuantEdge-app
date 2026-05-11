@@ -1,0 +1,51 @@
+name: Daily Stock Analysis
+
+on:
+  schedule:
+    - cron: '0 9 * * 1-5'  # 9 AM UTC = 6 AM Argentina, Mon-Fri
+  workflow_dispatch:
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        working-directory: analytics-service
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run analysis
+        working-directory: analytics-service
+        env:
+          API_URL: ${{ secrets.API_URL }}
+          PYTHONPATH: ${{ github.workspace }}/analytics-service/app
+        run: |
+          cd app
+          python -c "
+          import sys
+          from services.data_fetcher import DataFetcher
+          from services.analyzer import TechnicalAnalyzer
+          from services.signal_generator import SignalGenerator
+          from services.scheduler import Scheduler
+          import asyncio
+
+          data_fetcher = DataFetcher()
+          analyzer = TechnicalAnalyzer()
+          signal_generator = SignalGenerator()
+          scheduler = Scheduler(data_fetcher, analyzer, signal_generator)
+          asyncio.run(scheduler.run_analysis())
+          print('Analysis completed successfully')
+          sys.exit(0)
+          "
+
+      - name: Verify signals saved
+        run: |
+          sleep 10
+          curl -s https://quantedge-api-a1ib.onrender.com/api/signals/today | jq '. | length' || echo "0 signals found"

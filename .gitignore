@@ -1,0 +1,82 @@
+# Dependencias
+node_modules/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Entornos virtuales
+venv/
+ENV/
+env/
+.venv/
+
+# IDEs y editores
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Sistemas operativos
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+*.err.log
+python.log
+python_err.log
+
+# Archivos temporales
+temp_signals.json
+*.tmp
+*.temp
+
+# Archivos de entorno
+.env
+.env.example
+.env.local
+.env.development
+.env.production
+
+# Build outputs
+dist/
+build/
+out/
+target/
+*.jar
+*.war
+*.ear
+
+# Cobertura de cobertura
+coverage/
+*.lcov
+
+# Dependencias de Java
+.mvn/
+*.iml
+
+# Dependencias de Angular
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# Archivos de configuración específicos de desarrollo
+api-service/src/main/resources/application-dev.properties
+api-service/src/main/resources/application-local.properties
+
+# Archivos de datos
+data/
+database/
+*.db
+*.sqlite
+*.sqlite3
+
+# Scripts temporales
+*.bat
+*.ps1
+*.sql
+
+# Archivos de caché de Angular
+.angular/
