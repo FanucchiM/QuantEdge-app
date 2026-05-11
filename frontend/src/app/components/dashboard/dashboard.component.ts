@@ -2505,14 +2505,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   get sortedSignals(): Signal[] {
     let result = this.filteredSignals;
     
-    // Filter by search query
-    if (this.searchQuery && this.searchQuery.trim()) {
-      const query = this.searchQuery.toLowerCase().trim();
-      result = result.filter(s => 
-        (s.companyName && s.companyName.toLowerCase().includes(query))
-      );
-    }
-    
     if (this.sortConfigs.length === 0 && (!this.sortColumn || !this.sortDirection)) {
       return result;
     }
@@ -2522,9 +2514,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
       configs.push({ column: this.sortColumn, direction: this.sortDirection });
     }
     
-    if (configs.length === 0) return this.signals;
+    if (configs.length === 0) return result;
     
-    return [...this.signals].sort((a, b) => {
+    return [...result].sort((a, b) => {
       for (const config of configs) {
         let comparison = 0;
         
