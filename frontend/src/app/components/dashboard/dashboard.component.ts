@@ -2484,6 +2484,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   searchQuery = '';
   searchError = '';
   selectedSignalFilter: 'BUY' | 'SELL' | 'HOLD' | null = null;
+  lastFilterSource: 'search' | 'signalType' | null = null;
   analysisDate = '';
   
   private _filteredSignals: Signal[] = [];
@@ -2491,15 +2492,27 @@ export class DashboardComponent implements OnInit, OnDestroy {
   get filteredSignals(): Signal[] {
     let result = [...this.allSignals];
     
-    if (this.searchQuery && this.searchQuery.trim()) {
-      const query = this.searchQuery.toLowerCase().trim();
-      result = result.filter(s => 
-        (s.companyName && s.companyName.toLowerCase().includes(query))
-      );
-    }
-    
-    if (this.selectedSignalFilter) {
-      result = result.filter(s => s.signalType === this.selectedSignalFilter);
+    if (this.lastFilterSource === 'search') {
+      if (this.searchQuery && this.searchQuery.trim()) {
+        const query = this.searchQuery.toLowerCase().trim();
+        result = result.filter(s => 
+          (s.companyName && s.companyName.toLowerCase().includes(query))
+        );
+      }
+    } else if (this.lastFilterSource === 'signalType') {
+      if (this.selectedSignalFilter) {
+        result = result.filter(s => s.signalType === this.selectedSignalFilter);
+      }
+    } else {
+      if (this.searchQuery && this.searchQuery.trim()) {
+        const query = this.searchQuery.toLowerCase().trim();
+        result = result.filter(s => 
+          (s.companyName && s.companyName.toLowerCase().includes(query))
+        );
+      }
+      if (this.selectedSignalFilter) {
+        result = result.filter(s => s.signalType === this.selectedSignalFilter);
+      }
     }
     
     return result;
@@ -2630,14 +2643,25 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   toggleSignalFilter(type: 'BUY' | 'SELL' | 'HOLD'): void {
-    this.selectedSignalFilter = (this.selectedSignalFilter === type) ? null : type;
+    if (this.selectedSignalFilter === type) {
+      this.selectedSignalFilter = null;
+      this.lastFilterSource = null;
+    } else {
+      this.selectedSignalFilter = type;
+      this.lastFilterSource = 'signalType';
+      this.searchQuery = '';
+      this.searchError = '';
+    }
   }
 
   clearSignalFilter(): void {
     this.selectedSignalFilter = null;
+    this.lastFilterSource = null;
   }
 
   onSearchChange(): void {
+    this.lastFilterSource = 'search';
+    this.selectedSignalFilter = null;
     this.searchError = '';
     if (this.searchQuery && this.searchQuery.trim()) {
       const query = this.searchQuery.toLowerCase().trim();
@@ -2655,6 +2679,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   clearSearch(): void {
     this.searchQuery = '';
     this.searchError = '';
+    this.lastFilterSource = null;
   }
 
   ngOnInit(): void {
