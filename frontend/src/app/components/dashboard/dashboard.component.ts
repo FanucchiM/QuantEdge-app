@@ -179,7 +179,7 @@ export type SortDirection = 'asc' | 'desc' | null;
 
       <main class="main-content">
         <section class="stats-section">
-          <div class="stat-card buy">
+          <div class="stat-card buy" (click)="toggleSignalFilter('BUY')" [class.active]="selectedSignalFilter === 'BUY'">
             <div class="stat-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
@@ -192,7 +192,7 @@ export type SortDirection = 'asc' | 'desc' | null;
             </div>
           </div>
 
-          <div class="stat-card sell">
+          <div class="stat-card sell" (click)="toggleSignalFilter('SELL')" [class.active]="selectedSignalFilter === 'SELL'">
             <div class="stat-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
@@ -205,7 +205,7 @@ export type SortDirection = 'asc' | 'desc' | null;
             </div>
           </div>
 
-          <div class="stat-card hold">
+          <div class="stat-card hold" (click)="toggleSignalFilter('HOLD')" [class.active]="selectedSignalFilter === 'HOLD'">
             <div class="stat-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -217,7 +217,7 @@ export type SortDirection = 'asc' | 'desc' | null;
             </div>
           </div>
 
-          <div class="stat-card total">
+          <div class="stat-card total" (click)="clearSignalFilter()" [class.active]="selectedSignalFilter === null">
             <div class="stat-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
@@ -593,6 +593,15 @@ export type SortDirection = 'asc' | 'desc' | null;
 
     .stat-card.buy:hover { box-shadow: 0 12px 40px rgba(34, 197, 94, 0.15); }
     .stat-card.sell:hover { box-shadow: 0 12px 40px rgba(239, 68, 68, 0.15); }
+
+    .stat-card.active {
+      border-color: currentColor;
+      transform: scale(1.02);
+    }
+    .stat-card.buy.active { border-color: var(--buy); box-shadow: 0 12px 40px rgba(34, 197, 94, 0.2); }
+    .stat-card.sell.active { border-color: var(--sell); box-shadow: 0 12px 40px rgba(239, 68, 68, 0.2); }
+    .stat-card.hold.active { border-color: var(--hold); box-shadow: 0 12px 40px rgba(234, 179, 8, 0.2); }
+    .stat-card.total.active { border-color: var(--accent); box-shadow: 0 12px 40px rgba(139, 92, 246, 0.2); }
 
     .stat-icon {
       width: 56px;
@@ -2464,6 +2473,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   
   searchQuery = '';
   searchError = '';
+  selectedSignalFilter: 'BUY' | 'SELL' | 'HOLD' | null = null;
   analysisDate = '';
   
   private destroyRef = inject(DestroyRef);
@@ -2479,6 +2489,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
       result = result.filter(s => 
         (s.companyName && s.companyName.toLowerCase().includes(query))
       );
+    }
+    
+    // Filter by signal type
+    if (this.selectedSignalFilter) {
+      result = result.filter(s => s.signalType === this.selectedSignalFilter);
     }
     
     if (this.sortConfigs.length === 0 && (!this.sortColumn || !this.sortDirection)) {
@@ -2594,6 +2609,23 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.sortMenuOpen = false;
   }
 
+  toggleSignalFilter(type: 'BUY' | 'SELL' | 'HOLD'): void {
+    this.selectedSignalFilter = (this.selectedSignalFilter === type) ? null : type;
+    this.filteredSignals = this.applySignalFilter(this.allSignals);
+    this.updateCounts();
+  }
+
+  clearSignalFilter(): void {
+    this.selectedSignalFilter = null;
+    this.filteredSignals = this.applySignalFilter(this.allSignals);
+    this.updateCounts();
+  }
+
+  private applySignalFilter(signals: Signal[]): Signal[] {
+    if (!this.selectedSignalFilter) return signals;
+    return signals.filter(s => s.signalType === this.selectedSignalFilter);
+  }
+
   onSearchChange(): void {
     this.searchError = '';
     if (this.searchQuery && this.searchQuery.trim()) {
@@ -2605,11 +2637,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.searchError = 'No results found. Try a different name.';
       } else {
         this.signals = result;
+        this.filteredSignals = this.applySignalFilter(result);
         this.updateCounts();
       }
     } else {
       this.searchError = '';
       this.signals = [...this.allSignals];
+      this.filteredSignals = this.applySignalFilter(this.allSignals);
       this.updateCounts();
     }
   }
@@ -2618,6 +2652,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.searchQuery = '';
     this.searchError = '';
     this.signals = [...this.allSignals];
+    this.filteredSignals = this.applySignalFilter(this.allSignals);
     this.updateCounts();
   }
 
