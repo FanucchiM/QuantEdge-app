@@ -2539,9 +2539,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
     } else {
       this.sortConfigs.push({ column, direction: 'asc' });
-      if (this.sortConfigs.length > 3) {
-        this.sortConfigs.shift();
-      }
     }
     
     this.sortColumn = this.sortConfigs.length > 0 ? this.sortConfigs[this.sortConfigs.length - 1].column : null;
