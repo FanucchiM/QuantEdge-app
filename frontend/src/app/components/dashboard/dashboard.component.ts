@@ -2442,7 +2442,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   @ViewChild('seasonalityChart') seasonalityChartRef!: ElementRef;
   
   signals: Signal[] = [];
-  filteredSignals: Signal[] = [];
   allSignals: Signal[] = [];
   selectedSignal: Signal | null = null;
   stockHistory: StockHistory | null = null;
@@ -2476,6 +2475,29 @@ export class DashboardComponent implements OnInit, OnDestroy {
   selectedSignalFilter: 'BUY' | 'SELL' | 'HOLD' | null = null;
   analysisDate = '';
   
+  private _filteredSignals: Signal[] = [];
+  
+  get filteredSignals(): Signal[] {
+    let result = [...this.allSignals];
+    
+    if (this.searchQuery && this.searchQuery.trim()) {
+      const query = this.searchQuery.toLowerCase().trim();
+      result = result.filter(s => 
+        (s.companyName && s.companyName.toLowerCase().includes(query))
+      );
+    }
+    
+    if (this.selectedSignalFilter) {
+      result = result.filter(s => s.signalType === this.selectedSignalFilter);
+    }
+    
+    return result;
+  }
+  
+  set filteredSignals(value: Signal[]) {
+    this._filteredSignals = value;
+  }
+  
   private destroyRef = inject(DestroyRef);
 
   constructor(private signalService: SignalService) {}
@@ -2489,11 +2511,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       result = result.filter(s => 
         (s.companyName && s.companyName.toLowerCase().includes(query))
       );
-    }
-    
-    // Filter by signal type
-    if (this.selectedSignalFilter) {
-      result = result.filter(s => s.signalType === this.selectedSignalFilter);
     }
     
     if (this.sortConfigs.length === 0 && (!this.sortColumn || !this.sortDirection)) {
@@ -2611,19 +2628,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   toggleSignalFilter(type: 'BUY' | 'SELL' | 'HOLD'): void {
     this.selectedSignalFilter = (this.selectedSignalFilter === type) ? null : type;
-    this.filteredSignals = this.applySignalFilter(this.allSignals);
-    this.updateCounts();
   }
 
   clearSignalFilter(): void {
     this.selectedSignalFilter = null;
-    this.filteredSignals = this.applySignalFilter(this.allSignals);
-    this.updateCounts();
-  }
-
-  private applySignalFilter(signals: Signal[]): Signal[] {
-    if (!this.selectedSignalFilter) return signals;
-    return signals.filter(s => s.signalType === this.selectedSignalFilter);
   }
 
   onSearchChange(): void {
@@ -2635,25 +2643,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
       );
       if (result.length === 0) {
         this.searchError = 'No results found. Try a different name.';
-      } else {
-        this.signals = result;
-        this.filteredSignals = this.applySignalFilter(result);
-        this.updateCounts();
       }
     } else {
       this.searchError = '';
-      this.signals = [...this.allSignals];
-      this.filteredSignals = this.applySignalFilter(this.allSignals);
-      this.updateCounts();
     }
   }
 
   clearSearch(): void {
     this.searchQuery = '';
     this.searchError = '';
-    this.signals = [...this.allSignals];
-    this.filteredSignals = this.applySignalFilter(this.allSignals);
-    this.updateCounts();
   }
 
   ngOnInit(): void {
@@ -2681,7 +2679,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         next: (allSignals) => {
           this.allSignals = allSignals;
           this.signals = allSignals;
-          this.filteredSignals = allSignals;
           this.totalSignals = allSignals.length;
           this.loading = false;
           this.updateCounts(allSignals);
@@ -2702,7 +2699,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   updateCounts(signals?: Signal[]): void {
-    const data = signals || this.filteredSignals;
+    const data = signals || this.allSignals;
     this.buyCount = data.filter(s => s.signalType === 'BUY').length;
     this.sellCount = data.filter(s => s.signalType === 'SELL').length;
     this.holdCount = data.filter(s => s.signalType === 'HOLD').length;
